@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
@@ -37,23 +38,31 @@ public class ImageController {
 
     //    can also be done with a body instead of @RequestParam
     @PostMapping
-    public ResponseEntity<ImageDTO> getImageTags(@RequestParam("imageUrl") String imageUrl) {
+    public ResponseEntity<?> getImageTags(@RequestParam("imageUrl") String imageUrl) {
         if (!imageService.validateImage(imageUrl)) {
             System.out.println("Invalid URL");
 //            TODO create an error message class and return it as a 400 Error
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Image URL");
+        }
+        List<Integer> imageDimensions = new ArrayList<>();
+        try {
+            imageDimensions = imageService.getImageWidthAndHeight(imageUrl);
+        } catch (Exception e) {
+//            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while trying to get image width and height");
         }
 
-        var imageDimensions = imageService.getImageWidthAndHeight(imageUrl);
         int imageWidth = imageDimensions.get(0);
         int imageHeight = imageDimensions.get(1);
+
         List<TagDTO> imageTags = new ArrayList<>();
 
         try {
             imageTags = imageService.getImageTags(imageUrl);
         } catch (IOException e) {
-//            TODO
-            e.printStackTrace();
+//            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while fetching image tags");
         }
 
         ImageDTO createdDTO = new ImageDTO(imageUrl, imageTags, imageWidth, imageHeight);
@@ -63,5 +72,4 @@ public class ImageController {
                 ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri()
         ).body(createdDTO);
     }
-
 }

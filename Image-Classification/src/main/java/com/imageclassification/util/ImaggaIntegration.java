@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-public class ImaggaIntegration {
-    public static List<TagDTO> getImageTags(String imageUrl) throws IOException {
+public class ImaggaIntegration implements ImageTagger {
+    public List<TagDTO> getImageTags(String imageUrl) throws IOException {
         String credentialsToEncode = Secret.API_KEY + ":" + Secret.API_SECRET;
         String basicAuth = Base64.getEncoder().encodeToString(credentialsToEncode.getBytes(StandardCharsets.UTF_8));
 

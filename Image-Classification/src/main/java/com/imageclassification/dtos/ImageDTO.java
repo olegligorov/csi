@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 public class ImageDTO {
     private String url;
-    LocalDateTime analysedAt;
+    private LocalDateTime analysedAt;
     private List<TagDTO> tags;
     private int width;
     private int height;
@@ -22,5 +22,4 @@ public class ImageDTO {
         this.height = height;
         analysedAt = LocalDateTime.now();
     }
-
 }

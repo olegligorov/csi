@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ImageService {
     boolean validateImage(String imageUrl);
-    List<Integer> getImageWidthAndHeight(String imageUrl);
+    List<Integer> getImageWidthAndHeight(String imageUrl) throws Exception;
     List<TagDTO> getImageTags(String imageUrl) throws IOException;
 }
