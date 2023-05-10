@@ -69,7 +69,7 @@ public class ImageServiceImpl implements ImageService {
         }
 
 //        Check if the image is already in the database
-        Optional<Image> image = imageRepository.findById(imageUrl);
+        Optional<Image> image = imageRepository.findByUrl(imageUrl);
         if (image.isPresent()) {
             return image.get();
         }
