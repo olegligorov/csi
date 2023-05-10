@@ -1,6 +1,6 @@
 package com.imageclassification.util.ImaggaUtil;
 
-public class Tag {
+public class ImaggaTag {
     public double confidence;
     public TagName tag;
 }

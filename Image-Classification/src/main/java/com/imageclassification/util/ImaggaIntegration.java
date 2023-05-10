@@ -2,8 +2,9 @@ package com.imageclassification.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imageclassification.dtos.TagDTO;
+import com.imageclassification.models.Tag;
+import com.imageclassification.util.ImaggaUtil.ImaggaTag;
 import com.imageclassification.util.ImaggaUtil.Root;
-import com.imageclassification.util.ImaggaUtil.Tag;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,12 +12,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ImaggaIntegration implements ImageTagger {
-    public List<TagDTO> getImageTags(String imageUrl) throws IOException {
+    private static final String SERVICE_NAME = "Imagga";
+
+    public Set<Tag> getImageTags(String imageUrl) throws IOException {
         String credentialsToEncode = Secret.API_KEY + ":" + Secret.API_SECRET;
         String basicAuth = Base64.getEncoder().encodeToString(credentialsToEncode.getBytes(StandardCharsets.UTF_8));
 
@@ -39,19 +43,23 @@ public class ImaggaIntegration implements ImageTagger {
 
         connectionInput.close();
 
-//      Parse the jsonResponse to a List of tags.
-
+//      Parse the jsonResponse to a Set of tags.
         ObjectMapper objectMapper = new ObjectMapper();
         Root tagResult = objectMapper.readValue(jsonResponse, Root.class);
 
-        List<Tag> tags = tagResult.result.tags.stream().limit(5).toList();
+        List<ImaggaTag> tags = tagResult.result.tags.stream().limit(5).toList();
 
-        List<TagDTO> tagDtoList = new ArrayList<>();
+        Set<Tag> tagSet = new HashSet<>();
 
         for (var tag : tags) {
-            tagDtoList.add(new TagDTO(tag.tag.en, tag.confidence));
+            tagSet.add(new Tag(tag.tag.en, tag.confidence));
         }
 
-        return tagDtoList;
+        return tagSet;
+    }
+
+    @Override
+    public String getServiceName() {
+        return SERVICE_NAME;
     }
 }
