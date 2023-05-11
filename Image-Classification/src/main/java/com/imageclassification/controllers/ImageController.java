@@ -9,6 +9,8 @@ import io.github.bucket4j.Refill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 //@RequestMapping("/csi/api/v1/images")
@@ -50,5 +53,16 @@ public class ImageController {
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri()
         ).body(createdImage);
+    }
+
+    @GetMapping("/{imageId:\\d+}")
+    public Image getImage(@PathVariable("imageId") Long imageId) {
+        Image image = imageService.getImageById(imageId);
+        return image;
+    }
+
+    @GetMapping
+    public List<Image> getAllImages() {
+        return imageService.getAllImages();
     }
 }

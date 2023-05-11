@@ -5,6 +5,7 @@ import com.imageclassification.dtos.TagDTO;
 import com.imageclassification.models.Tag;
 import com.imageclassification.util.ImaggaUtil.ImaggaTag;
 import com.imageclassification.util.ImaggaUtil.Root;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Service
 public class ImaggaIntegration implements ImageTagger {
     private static final String SERVICE_NAME = "Imagga";
 

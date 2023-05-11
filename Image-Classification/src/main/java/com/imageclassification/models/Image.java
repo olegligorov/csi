@@ -26,6 +26,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 //@RequiredArgsConstructor
+//@AllArgsConstructor
 @Table(name = "images", uniqueConstraints = @UniqueConstraint(columnNames = {"url"}))
 public class Image {
     @Id

@@ -26,11 +26,13 @@ import java.util.Set;
 public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
     private final TagRepository tagRepository;
+    private final ImageTagger imageTagger;
 
     @Autowired
-    public ImageServiceImpl(ImageRepository imageRepository, TagRepository tagRepository) {
+    public ImageServiceImpl(ImageRepository imageRepository, TagRepository tagRepository, ImageTagger imageTagger) {
         this.imageRepository = imageRepository;
         this.tagRepository = tagRepository;
+        this.imageTagger = imageTagger;
     }
 
     @Override
@@ -56,9 +58,8 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Set<Tag> getTags(String imageUrl) throws IOException {
 
-        ImageTagger imageTagger = new ImaggaIntegration();
-        var tags = imageTagger.getImageTags(imageUrl);
-        return tags;
+//        ImageTagger imageTagger = new ImaggaIntegration();
+        return imageTagger.getImageTags(imageUrl);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class ImageServiceImpl implements ImageService {
         int imageWidth = imageDimensions.get(0);
         int imageHeight = imageDimensions.get(1);
         Set<Tag> tags = new HashSet<>();
-        ImageTagger imageTagger = new ImaggaIntegration();
+//        ImageTagger imageTagger = new ImaggaIntegration();
         String imageTaggerServiceName = imageTagger.getServiceName();
 
         try {
@@ -97,5 +98,16 @@ public class ImageServiceImpl implements ImageService {
 
         Image createdImage = new Image(imageUrl, imageTaggerServiceName, tags, imageWidth, imageHeight);
         return imageRepository.save(createdImage);
+    }
+
+    @Override
+    public Image getImageById(Long id) {
+        return imageRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Image with id %d was not found", id)));
+    }
+
+    @Override
+    public List<Image> getAllImages() {
+        return imageRepository.findAll();
     }
 }
