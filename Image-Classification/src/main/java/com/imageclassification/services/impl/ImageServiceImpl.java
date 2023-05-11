@@ -17,10 +17,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ImageServiceImpl implements ImageService {
@@ -85,7 +87,6 @@ public class ImageServiceImpl implements ImageService {
         int imageWidth = imageDimensions.get(0);
         int imageHeight = imageDimensions.get(1);
         Set<Tag> tags = new HashSet<>();
-//        ImageTagger imageTagger = new ImaggaIntegration();
         String imageTaggerServiceName = imageTagger.getServiceName();
 
         try {
@@ -94,8 +95,11 @@ public class ImageServiceImpl implements ImageService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while fetching image tags");
         }
 
-        tagRepository.saveAll(tags);
-
+//        try {
+//            tagRepository.saveAll(tags);
+//        } catch (Exception e) {
+//
+//        }
         Image createdImage = new Image(imageUrl, imageTaggerServiceName, tags, imageWidth, imageHeight);
         return imageRepository.save(createdImage);
     }
@@ -109,5 +113,11 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public List<Image> getAllImages() {
         return imageRepository.findAll();
+    }
+
+    @Override
+    public List<Image> getAllImagesWithTags(Collection<String> tags) {
+        var tagSet = new HashSet<>(tags);
+        return imageRepository.findImagesByTags(tagSet, tagSet.size());
     }
 }

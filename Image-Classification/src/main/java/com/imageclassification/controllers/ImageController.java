@@ -20,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -64,5 +65,10 @@ public class ImageController {
     @GetMapping
     public List<Image> getAllImages() {
         return imageService.getAllImages();
+    }
+
+    @GetMapping("/tags")
+    public List<Image> getAllImagesWithTags(@RequestParam(value = "tags") Collection<String> tags) {
+        return imageService.getAllImagesWithTags(tags);
     }
 }

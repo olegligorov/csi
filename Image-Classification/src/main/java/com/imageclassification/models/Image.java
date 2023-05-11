@@ -1,14 +1,17 @@
 package com.imageclassification.models;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +22,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -39,7 +43,8 @@ public class Image {
     private LocalDateTime analysedAt;
     private String analysedByService;
 
-    @ManyToMany
+//    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(name = "image_tag",
             joinColumns = @JoinColumn(name = "image_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
@@ -66,4 +71,16 @@ public class Image {
         analysedAt = LocalDateTime.now();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Image)) return false;
+        Image image = (Image) o;
+        return getId().equals(image.getId()) && getUrl().equals(image.getUrl());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUrl());
+    }
 }
