@@ -22,8 +22,8 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-//@Table(name = "tags", uniqueConstraints = @UniqueConstraint(columnNames = {"tag"}))
-@Table(name = "tags")
+@Table(name = "tags", uniqueConstraints = @UniqueConstraint(columnNames = {"tag"}))
+//@Table(name = "tags")
 @NoArgsConstructor
 public class Tag {
     @Id
@@ -34,15 +34,15 @@ public class Tag {
     @NonNull
     private String tag;
 
-    @NonNull
-    private double confidence;
-
-    @JsonIgnore
-    @ManyToMany(mappedBy = "imageTags")
-    private Set<Image> imageSet = new HashSet<>();
-
-    public Tag(String tag, double confidence) {
-        this.confidence = confidence;
+    public Tag(String tag) {
         this.tag = tag;
+    }
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "id=" + id +
+                ", tag='" + tag + '\'' +
+                '}';
     }
 }
