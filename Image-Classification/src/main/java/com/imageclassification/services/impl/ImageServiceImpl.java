@@ -130,7 +130,6 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public List<Image> getAllImagesWithTags(Collection<String> tags) {
         var tagSet = new HashSet<>(tags);
-//        return imageRepository.findImagesByTags(tagSet, tagSet.size());
-        return new ArrayList<>();
+        return imageRepository.findImagesByTags(tagSet, tagSet.size());
     }
 }

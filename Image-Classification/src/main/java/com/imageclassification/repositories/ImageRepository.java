@@ -14,7 +14,10 @@ import java.util.Optional;
 public interface ImageRepository extends JpaRepository<Image, Long> {
     Optional<Image> findByUrl(String url);
 
-//    TODO
-//    @Query(value = "select i from Image i join i.imageTags t where t.tag in :tagList group by i having count(t) = :size")
-//    List<Image> findImagesByTags(@Param("tagList") Collection<String> tags, @Param("size") int size);
+    @Query(value = "select * from images " +
+            "join image_tag on images.image_id = image_tag.image_id " +
+            "join tags on image_tag.tag_id = tags.tag_id where tags.tag in :tagList " +
+            "group by images.image_id " +
+            "having count(distinct tags.tag_id) = :tagCount", nativeQuery = true)
+    List<Image> findImagesByTags(@Param("tagList") Collection<String> tagList, @Param("tagCount") int tagCount);
 }
