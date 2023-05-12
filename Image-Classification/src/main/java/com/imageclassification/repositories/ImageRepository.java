@@ -15,6 +15,6 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     Optional<Image> findByUrl(String url);
 
 //    TODO
-    @Query(value = "select i from Image i join i.imageTags t where t.tag in :tagList group by i having count(t) = :size")
-    List<Image> findImagesByTags(@Param("tagList") Collection<String> tags, @Param("size") int size);
+//    @Query(value = "select i from Image i join i.imageTags t where t.tag in :tagList group by i having count(t) = :size")
+//    List<Image> findImagesByTags(@Param("tagList") Collection<String> tags, @Param("size") int size);
 }

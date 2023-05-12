@@ -15,5 +15,5 @@ public interface ImageService {
     Image getImageTags(String imageUrl);
     Image getImageById(Long id);
     List<Image> getAllImages();
-    List<Image> getAllImagesWithTags(Collection<String> tags);
+//    List<Image> getAllImagesWithTags(Collection<String> tags);
 }
