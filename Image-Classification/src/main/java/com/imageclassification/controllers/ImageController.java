@@ -54,7 +54,6 @@ public class ImageController {
             throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
         }
         Image createdImage = imageService.getImageTags(imageUrl, noCache);
-        createdImage.setAnalysedAt(LocalDateTime.now());
 
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri()

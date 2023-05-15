@@ -8,6 +8,7 @@ import com.imageclassification.services.ImageService;
 import com.imageclassification.util.ImageTagger;
 import com.imageclassification.util.ImaggaIntegration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -114,6 +115,7 @@ public class ImageServiceImpl implements ImageService {
             }
         }
 
+        createdImage.setAnalysedAt(LocalDateTime.now());
         return imageRepository.save(createdImage);
     }
 
