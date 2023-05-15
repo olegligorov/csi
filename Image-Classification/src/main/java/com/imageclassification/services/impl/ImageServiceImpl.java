@@ -60,16 +60,23 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image getImageTags(String imageUrl) {
+    public Image getImageTags(String imageUrl, boolean noCache) {
         if (!validateImage(imageUrl)) {
             //return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Image URL");
         }
 
-//        Check if the image is already in the database
+//      if noCache is false then we should check if the image is already in the database
+        boolean imageIsPresent = false;
+        Image createdImage = null;
+
         Optional<Image> image = imageRepository.findByUrl(imageUrl);
         if (image.isPresent()) {
-            return image.get();
+            createdImage = image.get();
+            imageIsPresent = true;
+            if (!noCache) {
+                return createdImage;
+            }
         }
 
         List<Integer> imageDimensions = new ArrayList<>();
@@ -81,9 +88,9 @@ public class ImageServiceImpl implements ImageService {
 
         int imageWidth = imageDimensions.get(0);
         int imageHeight = imageDimensions.get(1);
-        Map<String, Double> tags = new HashMap<>();
         String imageTaggerServiceName = imageTagger.getServiceName();
 
+        Map<String, Double> tags = new HashMap<>();
         try {
             tags = imageTagger.getImageTags(imageUrl);
         } catch (IOException e) {
@@ -91,7 +98,9 @@ public class ImageServiceImpl implements ImageService {
         }
 
         Map<Tag, Double> tagMap = new HashMap<>();
-        Image createdImage = imageRepository.save(new Image(imageUrl, imageTaggerServiceName, tagMap, imageWidth, imageHeight));
+        if (imageIsPresent == false) {
+            createdImage = imageRepository.save(new Image(imageUrl, imageTaggerServiceName, tagMap, imageWidth, imageHeight));
+        }
 
         for (String tag : tags.keySet()) {
             Optional<Tag> existingTag = tagRepository.findByTag(tag);
@@ -104,7 +113,6 @@ public class ImageServiceImpl implements ImageService {
             }
         }
 
-//        Image createdImage = new Image(imageUrl, imageTaggerServiceName, tags, imageWidth, imageHeight);
         return imageRepository.save(createdImage);
     }
 
