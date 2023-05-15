@@ -60,14 +60,6 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Set<Tag> getTags(String imageUrl) throws IOException {
-
-//        ImageTagger imageTagger = new ImaggaIntegration();
-//        return imageTagger.getImageTags(imageUrl);
-        return new HashSet<>();
-    }
-
-    @Override
     public Image getImageTags(String imageUrl) {
         if (!validateImage(imageUrl)) {
             //return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
