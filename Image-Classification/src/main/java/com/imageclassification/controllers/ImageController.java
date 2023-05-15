@@ -44,7 +44,8 @@ public class ImageController {
     }
 
     @PostMapping
-    public ResponseEntity<?> getImageTags(@RequestParam("imageUrl") String imageUrl) {
+//    TODO
+    public ResponseEntity<?> fetchImageTags(@RequestParam("imageUrl") String imageUrl) {
         if (!bucket.tryConsume(1)) {
             throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
         }

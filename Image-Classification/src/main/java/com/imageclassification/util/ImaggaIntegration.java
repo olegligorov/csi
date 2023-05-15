@@ -14,15 +14,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
 public class ImaggaIntegration implements ImageTagger {
     private static final String SERVICE_NAME = "Imagga";
 
-    public Set<Tag> getImageTags(String imageUrl) throws IOException {
+    public Map<String, Double> getImageTags(String imageUrl) throws IOException {
         String credentialsToEncode = Secret.API_KEY + ":" + Secret.API_SECRET;
         String basicAuth = Base64.getEncoder().encodeToString(credentialsToEncode.getBytes(StandardCharsets.UTF_8));
 
@@ -51,13 +53,13 @@ public class ImaggaIntegration implements ImageTagger {
 
         List<ImaggaTag> tags = tagResult.result.tags.stream().limit(5).toList();
 
-        Set<Tag> tagSet = new HashSet<>();
+        Map<String, Double> tagMap = new HashMap<>();
 
         for (var tag : tags) {
-            tagSet.add(new Tag(tag.tag.en, tag.confidence));
+            tagMap.put(tag.tag.en, tag.confidence);
         }
 
-        return tagSet;
+        return tagMap;
     }
 
     @Override
