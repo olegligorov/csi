@@ -65,10 +65,8 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image getImageTags(String imageUrl, boolean noCache) {
         if (!validateImage(imageUrl)) {
-            //return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Image URL");
         }
-
 //      if noCache is false then we should check if the image is already in the database
         boolean imageIsPresent = false;
         Image createdImage = null;
