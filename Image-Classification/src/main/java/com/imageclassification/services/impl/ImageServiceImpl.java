@@ -65,7 +65,6 @@ public class ImageServiceImpl implements ImageService {
             //return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Image URL");
         }
-
 //        Check if the image is already in the database
         Optional<Image> image = imageRepository.findByUrl(imageUrl);
         if (image.isPresent()) {
