@@ -8,6 +8,8 @@ import com.imageclassification.services.ImageService;
 import com.imageclassification.util.ImageTagger;
 import com.imageclassification.util.ImaggaIntegration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,6 +18,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -125,6 +128,11 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public List<Image> getAllImages() {
         return imageRepository.findAll();
+    }
+
+    @Override
+    public Page<Image> getAllImagesPaged(Pageable pageRequest) {
+        return imageRepository.findAll(pageRequest);
     }
 
     @Override

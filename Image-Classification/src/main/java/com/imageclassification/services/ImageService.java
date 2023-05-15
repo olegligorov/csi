@@ -2,6 +2,8 @@ package com.imageclassification.services;
 
 import com.imageclassification.models.Image;
 import com.imageclassification.models.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -14,5 +16,6 @@ public interface ImageService {
     Image getImageTags(String imageUrl, boolean noCache);
     Image getImageById(Long id);
     List<Image> getAllImages();
+    Page<Image> getAllImagesPaged(Pageable pageRequest);
     List<Image> getAllImagesWithTags(Collection<String> tags);
 }
