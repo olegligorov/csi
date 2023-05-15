@@ -113,7 +113,8 @@ public class ImageServiceImpl implements ImageService {
                 createdImage.addTag(existingTag.get(), confidence);
             }
         }
-
+        
+        createdImage.setAnalysedAt(LocalDateTime.now());
         return imageRepository.save(createdImage);
     }
 
