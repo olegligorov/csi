@@ -18,8 +18,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -79,7 +81,7 @@ public class ImageServiceImpl implements ImageService {
 
         int imageWidth = imageDimensions.get(0);
         int imageHeight = imageDimensions.get(1);
-        Set<Tag> tags = new HashSet<>();
+        Map<String, Double> tags = new HashMap<>();
         String imageTaggerServiceName = imageTagger.getServiceName();
 
         try {
@@ -88,12 +90,21 @@ public class ImageServiceImpl implements ImageService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while fetching image tags");
         }
 
-//        try {
-//            tagRepository.saveAll(tags);
-//        } catch (Exception e) {
-//
-//        }
-        Image createdImage = new Image(imageUrl, imageTaggerServiceName, tags, imageWidth, imageHeight);
+        Map<Tag, Double> tagMap = new HashMap<>();
+        Image createdImage = imageRepository.save(new Image(imageUrl, imageTaggerServiceName, tagMap, imageWidth, imageHeight));
+
+        for (String tag : tags.keySet()) {
+            Optional<Tag> existingTag = tagRepository.findByTag(tag);
+            double confidence = tags.get(tag);
+            if (existingTag.isEmpty()) {
+                var createdTag = tagRepository.save(new Tag(tag));
+                createdImage.addTag(createdTag, confidence);
+            } else {
+                createdImage.addTag(existingTag.get(), confidence);
+            }
+        }
+
+//        Image createdImage = new Image(imageUrl, imageTaggerServiceName, tags, imageWidth, imageHeight);
         return imageRepository.save(createdImage);
     }
 
