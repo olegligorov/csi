@@ -8,6 +8,8 @@ import com.imageclassification.services.ImageService;
 import com.imageclassification.util.ImageTagger;
 import com.imageclassification.util.ImaggaIntegration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,6 +18,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -60,15 +63,21 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image getImageTags(String imageUrl) {
+    public Image getImageTags(String imageUrl, boolean noCache) {
         if (!validateImage(imageUrl)) {
-            //return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Image URL");
         }
-//        Check if the image is already in the database
+//      if noCache is false then we should check if the image is already in the database
+        boolean imageIsPresent = false;
+        Image createdImage = null;
+
         Optional<Image> image = imageRepository.findByUrl(imageUrl);
         if (image.isPresent()) {
-            return image.get();
+            createdImage = image.get();
+            imageIsPresent = true;
+            if (!noCache) {
+                return createdImage;
+            }
         }
 
         List<Integer> imageDimensions = new ArrayList<>();
@@ -80,9 +89,9 @@ public class ImageServiceImpl implements ImageService {
 
         int imageWidth = imageDimensions.get(0);
         int imageHeight = imageDimensions.get(1);
-        Map<String, Double> tags = new HashMap<>();
         String imageTaggerServiceName = imageTagger.getServiceName();
 
+        Map<String, Double> tags = new HashMap<>();
         try {
             tags = imageTagger.getImageTags(imageUrl);
         } catch (IOException e) {
@@ -90,7 +99,9 @@ public class ImageServiceImpl implements ImageService {
         }
 
         Map<Tag, Double> tagMap = new HashMap<>();
-        Image createdImage = imageRepository.save(new Image(imageUrl, imageTaggerServiceName, tagMap, imageWidth, imageHeight));
+        if (imageIsPresent == false) {
+            createdImage = imageRepository.save(new Image(imageUrl, imageTaggerServiceName, tagMap, imageWidth, imageHeight));
+        }
 
         for (String tag : tags.keySet()) {
             Optional<Tag> existingTag = tagRepository.findByTag(tag);
@@ -103,7 +114,6 @@ public class ImageServiceImpl implements ImageService {
             }
         }
 
-//        Image createdImage = new Image(imageUrl, imageTaggerServiceName, tags, imageWidth, imageHeight);
         return imageRepository.save(createdImage);
     }
 
@@ -116,6 +126,11 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public List<Image> getAllImages() {
         return imageRepository.findAll();
+    }
+
+    @Override
+    public Page<Image> getAllImagesPaged(Pageable pageRequest) {
+        return imageRepository.findAll(pageRequest);
     }
 
     @Override
