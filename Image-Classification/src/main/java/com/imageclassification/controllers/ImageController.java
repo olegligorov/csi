@@ -1,7 +1,6 @@
 package com.imageclassification.controllers;
 
 import com.imageclassification.models.Image;
-import com.imageclassification.models.Tag;
 import com.imageclassification.services.ImageService;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
@@ -22,7 +21,6 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,9 +36,10 @@ public class ImageController {
     @Autowired
     public ImageController(ImageService imageService) {
         this.imageService = imageService;
-
-        // Create Throttling bucket that allows only REQUESTS_PER_MINUTE requests every minute (REQUESTS_REFILL_TIMER)
-        Bandwidth limit = Bandwidth.classic(REQUESTS_PER_MINUTE, Refill.greedy(REQUESTS_PER_MINUTE, Duration.ofMinutes(REQUESTS_REFILL_TIMER)));
+        /**
+         * Create Throttling bucket that allows only REQUESTS_PER_MINUTE requests every minute (REQUESTS_REFILL_TIMER)
+        */
+         Bandwidth limit = Bandwidth.classic(REQUESTS_PER_MINUTE, Refill.greedy(REQUESTS_PER_MINUTE, Duration.ofMinutes(REQUESTS_REFILL_TIMER)));
         this.bucket = Bucket.builder()
                 .addLimit(limit)
                 .build();
@@ -49,7 +48,6 @@ public class ImageController {
     @PostMapping
 //    TODO
     public ResponseEntity<?> fetchImageTags(@RequestParam("imageUrl") String imageUrl, @RequestParam(name = "noCache", required = false, defaultValue = "false") boolean noCache) {
-        System.out.println("No cache is:" + noCache);
         if (!bucket.tryConsume(1)) {
             throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
         }
@@ -60,10 +58,12 @@ public class ImageController {
         ).body(createdImage);
     }
 
+// TODO return response entities
+
     @GetMapping("/{imageId:\\d+}")
-    public Image getImage(@PathVariable("imageId") Long imageId) {
+    public ResponseEntity<?> getImage(@PathVariable("imageId") Long imageId) {
         Image image = imageService.getImageById(imageId);
-        return image;
+        return ResponseEntity.ok(image);
     }
 
 //    @GetMapping
@@ -72,10 +72,10 @@ public class ImageController {
 //    }
 
     @GetMapping
-    public List<Image> getAllImages(@RequestParam(name = "order", defaultValue = "desc") String order,
+    public ResponseEntity<List<?>> getAllImages(@RequestParam(name = "order", defaultValue = "desc") String order,
                                     @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
                                     @RequestParam(name = "pageSize", defaultValue = "20") int pageSize) {
-        int offset = pageNumber * pageSize;
+        validateParameters(order, pageNumber, pageSize);
 
         Sort.Direction direction = Sort.Direction.DESC;
         if (order.equalsIgnoreCase("asc")) {
@@ -84,11 +84,23 @@ public class ImageController {
 
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, direction, "analysedAt");
         Page<Image> imagePage = imageService.getAllImagesPaged(pageRequest);
-        return imagePage.getContent();
+        return ResponseEntity.ok(imagePage.getContent());
     }
 
     @GetMapping("/tags")
-    public List<Image> getAllImagesWithTags(@RequestParam(value = "tags") Collection<String> tags) {
-        return imageService.getAllImagesWithTags(tags);
+    public ResponseEntity<List<Image>> getAllImagesWithTags(@RequestParam(value = "tags") Collection<String> tags) {
+        return ResponseEntity.ok(imageService.getAllImagesWithTags(tags));
+    }
+
+    private void validateParameters(String order, int pageNumber, int pageSize) {
+        if (!order.equalsIgnoreCase("desc") && !order.equalsIgnoreCase("asc")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid order parameter, order should be asc or desc");
+        }
+        if (pageNumber < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page number can not be less than 0");
+        }
+        if (pageSize < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page size can not be less than 0");
+        }
     }
 }

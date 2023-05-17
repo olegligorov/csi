@@ -55,7 +55,9 @@ public class ImageServiceImpl implements ImageService {
     }
 
     public List<Integer> getImageWidthAndHeight(String imageUrl) throws Exception {
-//      returns Array(Width, Height);
+    /**
+      returns Array(Width, Height);
+    */
         URL url = new URL(imageUrl);
         final BufferedImage img = ImageIO.read(url);
         int width = img.getWidth();
@@ -96,7 +98,7 @@ public class ImageServiceImpl implements ImageService {
         try {
             tags = imageTagger.getImageTags(imageUrl);
         } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while fetching image tags");
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Error while fetching image tags");
         }
 
         Map<Tag, Double> tagMap = new HashMap<>();
