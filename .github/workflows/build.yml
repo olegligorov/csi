@@ -19,6 +19,9 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
+          
+      - name: Init gradle
+        run: ./Image-Classification/gradlew init
 
       - name: Build with tests
         run: ./Image-Classification/gradlew clean build
