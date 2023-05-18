@@ -71,5 +71,5 @@ logging:
 #        type: trace
 #        stat: debug
 
-jwt:
-  secret: ${JWT_SECRET:not_a_secret}
+#jwt:
+#  secret: ${JWT_SECRET:not_a_secret}

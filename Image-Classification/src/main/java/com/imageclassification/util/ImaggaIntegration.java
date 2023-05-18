@@ -1,8 +1,6 @@
 package com.imageclassification.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.imageclassification.dtos.TagDTO;
-import com.imageclassification.models.Tag;
 import com.imageclassification.util.ImaggaUtil.ImaggaTag;
 import com.imageclassification.util.ImaggaUtil.Root;
 import org.springframework.stereotype.Service;
@@ -15,25 +13,25 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 public class ImaggaIntegration implements ImageTagger {
     private static final String SERVICE_NAME = "Imagga";
+    private static final String ENDPOINT_URL = "https://api.imagga.com/v2/tags";
+    private static final int TAG_LIMIT = 5;
 
     public Map<String, Double> getImageTags(String imageUrl) throws IOException {
-        String credentialsToEncode = Secret.API_KEY + ":" + Secret.API_SECRET;
+//        String credentialsToEncode = Secret.API_KEY + ":" + Secret.API_SECRET;
+        String credentialsToEncode = System.getenv("IMAGGA_API_KEY") + ":" + System.getenv("IMAGGA_API_SECRET");
+
         String basicAuth = Base64.getEncoder().encodeToString(credentialsToEncode.getBytes(StandardCharsets.UTF_8));
 
-        String endpointUrl = "https://api.imagga.com/v2/tags";
+        String url = ENDPOINT_URL + "?image_url=" + imageUrl;
 
-        String url = endpointUrl + "?image_url=" + imageUrl;
         URL urlObject = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) urlObject.openConnection();
-
         connection.setRequestProperty("Authorization", "Basic " + basicAuth);
 
         int responseCode = connection.getResponseCode();
@@ -41,17 +39,17 @@ public class ImaggaIntegration implements ImageTagger {
         System.out.println("\nSending 'GET' request to URL : " + url);
         System.out.println("Response Code : " + responseCode);
 
-        BufferedReader connectionInput = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String jsonResponse;
+        try (BufferedReader connectionInput = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            jsonResponse = connectionInput.readLine();
+//        connectionInput.close();
+        }
 
-        String jsonResponse = connectionInput.readLine();
-
-        connectionInput.close();
-
-//      Parse the jsonResponse to a Set of tags.
+        //Parse the jsonResponse to a Set of tags.
         ObjectMapper objectMapper = new ObjectMapper();
         Root tagResult = objectMapper.readValue(jsonResponse, Root.class);
 
-        List<ImaggaTag> tags = tagResult.result.tags.stream().limit(5).toList();
+        List<ImaggaTag> tags = tagResult.result.tags.stream().limit(TAG_LIMIT).toList();
 
         Map<String, Double> tagMap = new HashMap<>();
 

@@ -1,0 +1,27 @@
+name: Java Build project
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  build-with-tests:
+    runs-on: ubuntu-latest
+    environment: dev
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v1
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+          
+      - name: Init gradle
+        run: ./Image-Classification/gradlew init
+
+      - name: Build with tests
+        run: ./Image-Classification/gradlew build

@@ -6,7 +6,6 @@ import com.imageclassification.repositories.ImageRepository;
 import com.imageclassification.repositories.TagRepository;
 import com.imageclassification.services.ImageService;
 import com.imageclassification.util.ImageTagger;
-import com.imageclassification.util.ImaggaIntegration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +25,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class ImageServiceImpl implements ImageService {
@@ -54,7 +51,9 @@ public class ImageServiceImpl implements ImageService {
     }
 
     public List<Integer> getImageWidthAndHeight(String imageUrl) throws Exception {
-//      returns Array(Width, Height);
+    /**
+      returns Array(Width, Height);
+    */
         URL url = new URL(imageUrl);
         final BufferedImage img = ImageIO.read(url);
         int width = img.getWidth();
@@ -95,7 +94,7 @@ public class ImageServiceImpl implements ImageService {
         try {
             tags = imageTagger.getImageTags(imageUrl);
         } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while fetching image tags");
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Error while fetching image tags");
         }
 
         Map<Tag, Double> tagMap = new HashMap<>();
@@ -113,7 +112,7 @@ public class ImageServiceImpl implements ImageService {
                 createdImage.addTag(existingTag.get(), confidence);
             }
         }
-        
+
         createdImage.setAnalysedAt(LocalDateTime.now());
         return imageRepository.save(createdImage);
     }
