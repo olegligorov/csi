@@ -7,7 +7,8 @@ on:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
-
+    environment: dev
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -27,6 +28,9 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+            
+      - name: Init gradle
+        run: ./Image-Classification/gradlew init
 
-      - name: Build and Test
+      - name: Build
         run: ./Image-Classification/gradlew build
