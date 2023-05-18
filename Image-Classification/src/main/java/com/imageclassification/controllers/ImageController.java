@@ -1,5 +1,6 @@
 package com.imageclassification.controllers;
 
+import com.imageclassification.dtos.ImageDTO;
 import com.imageclassification.models.Image;
 import com.imageclassification.services.ImageService;
 import io.github.bucket4j.Bandwidth;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,19 +40,30 @@ public class ImageController {
         this.imageService = imageService;
         /**
          * Create Throttling bucket that allows only REQUESTS_PER_MINUTE requests every minute (REQUESTS_REFILL_TIMER)
-        */
-         Bandwidth limit = Bandwidth.classic(REQUESTS_PER_MINUTE, Refill.greedy(REQUESTS_PER_MINUTE, Duration.ofMinutes(REQUESTS_REFILL_TIMER)));
+         */
+        Bandwidth limit = Bandwidth.classic(REQUESTS_PER_MINUTE, Refill.greedy(REQUESTS_PER_MINUTE, Duration.ofMinutes(REQUESTS_REFILL_TIMER)));
         this.bucket = Bucket.builder()
                 .addLimit(limit)
                 .build();
     }
 
+    //    @PostMapping
+//    public ResponseEntity<?> fetchImageTags(@RequestParam("imageUrl") String imageUrl, @RequestParam(name = "noCache", required = false, defaultValue = "false") boolean noCache) {
+//        if (!bucket.tryConsume(1)) {
+//            throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
+//        }
+//        Image createdImage = imageService.getImageTags(imageUrl, noCache);
+//
+//        return ResponseEntity.created(
+//                ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri()
+//        ).body(createdImage);
+//    }
     @PostMapping
-    public ResponseEntity<?> fetchImageTags(@RequestParam("imageUrl") String imageUrl, @RequestParam(name = "noCache", required = false, defaultValue = "false") boolean noCache) {
+    public ResponseEntity<?> fetchImageTags(@RequestBody ImageDTO imageDTO, @RequestParam(name = "noCache", required = false, defaultValue = "false") boolean noCache) {
         if (!bucket.tryConsume(1)) {
             throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
         }
-        Image createdImage = imageService.getImageTags(imageUrl, noCache);
+        Image createdImage = imageService.getImageTags(imageDTO.getUrl(), noCache);
 
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri()
@@ -70,8 +83,8 @@ public class ImageController {
 
     @GetMapping
     public ResponseEntity<List<?>> getAllImages(@RequestParam(name = "order", defaultValue = "desc") String order,
-                                    @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
-                                    @RequestParam(name = "pageSize", defaultValue = "20") int pageSize) {
+                                                @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+                                                @RequestParam(name = "pageSize", defaultValue = "20") int pageSize) {
         validateParameters(order, pageNumber, pageSize);
 
         Sort.Direction direction = Sort.Direction.DESC;
