@@ -18,7 +18,6 @@ import javax.persistence.UniqueConstraint;
 @Getter
 @Setter
 @Table(name = "tags", uniqueConstraints = @UniqueConstraint(columnNames = {"tag"}))
-//@Table(name = "tags")
 @NoArgsConstructor
 public class Tag {
     @Id

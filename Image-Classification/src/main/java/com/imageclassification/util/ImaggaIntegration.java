@@ -1,8 +1,6 @@
 package com.imageclassification.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.imageclassification.dtos.TagDTO;
-import com.imageclassification.models.Tag;
 import com.imageclassification.util.ImaggaUtil.ImaggaTag;
 import com.imageclassification.util.ImaggaUtil.Root;
 import org.springframework.stereotype.Service;
@@ -15,10 +13,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 public class ImaggaIntegration implements ImageTagger {

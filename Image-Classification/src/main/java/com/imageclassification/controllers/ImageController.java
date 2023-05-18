@@ -46,7 +46,6 @@ public class ImageController {
     }
 
     @PostMapping
-//    TODO
     public ResponseEntity<?> fetchImageTags(@RequestParam("imageUrl") String imageUrl, @RequestParam(name = "noCache", required = false, defaultValue = "false") boolean noCache) {
         if (!bucket.tryConsume(1)) {
             throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
@@ -57,8 +56,6 @@ public class ImageController {
                 ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri()
         ).body(createdImage);
     }
-
-// TODO return response entities
 
     @GetMapping("/{imageId:\\d+}")
     public ResponseEntity<?> getImage(@PathVariable("imageId") Long imageId) {

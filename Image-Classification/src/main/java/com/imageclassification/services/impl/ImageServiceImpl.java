@@ -6,9 +6,7 @@ import com.imageclassification.repositories.ImageRepository;
 import com.imageclassification.repositories.TagRepository;
 import com.imageclassification.services.ImageService;
 import com.imageclassification.util.ImageTagger;
-import com.imageclassification.util.ImaggaIntegration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -27,8 +25,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class ImageServiceImpl implements ImageService {
