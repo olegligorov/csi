@@ -24,4 +24,4 @@ jobs:
         run: ./Image-Classification/gradlew init
 
       - name: Build with tests
-        run: ./Image-Classification/gradlew clean build
+        run: ./Image-Classification/gradlew build
