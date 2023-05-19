@@ -27,6 +27,7 @@ out/
 !**/src/test/**/out/
 
 **/Secret.java
+**/uploads/
 
 ### NetBeans ###
 /nbproject/private/
