@@ -24,7 +24,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "images", uniqueConstraints = @UniqueConstraint(columnNames = {"url"}))
+@Table(name = "images", uniqueConstraints = @UniqueConstraint(columnNames = {"url", "checksum"}))
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +33,12 @@ public class Image {
 
     @NonNull
     private String url;
+
+    @Column(name = "checksum")
+    private String checksum;
+
+    private String imagePath;
+
     private LocalDateTime analysedAt;
     private String analysedByService;
 
@@ -46,14 +52,6 @@ public class Image {
     private int width;
     private int height;
 
-    public Image(String url, Map<Tag, Double> tags, int width, int height) {
-        this.url = url;
-        this.tags = tags;
-        this.width = width;
-        this.height = height;
-        analysedAt = LocalDateTime.now();
-    }
-
     public Image(String url, String analysedByService, Map<Tag, Double> tags, int width, int height) {
         this.url = url;
         this.analysedByService = analysedByService;
@@ -61,6 +59,16 @@ public class Image {
         this.width = width;
         this.height = height;
         analysedAt = LocalDateTime.now();
+    }
+
+    public Image(String url, String checksum, String imagePath, String analysedByService, Map<Tag, Double> tags, int width, int height) {
+        this.url = url;
+        this.checksum = checksum;
+        this.imagePath = imagePath;
+        this.analysedByService = analysedByService;
+        this.tags = tags;
+        this.width = width;
+        this.height = height;
     }
 
     @Override

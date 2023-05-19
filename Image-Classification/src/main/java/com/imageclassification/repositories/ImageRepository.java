@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
     Optional<Image> findByUrl(String url);
+    Optional<Image> findByChecksum(String url);
 
     @Query(value = "select * from images " +
             "join image_tag on images.image_id = image_tag.image_id " +
