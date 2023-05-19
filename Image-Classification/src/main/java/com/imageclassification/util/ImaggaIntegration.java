@@ -49,7 +49,7 @@ public class ImaggaIntegration implements ImageTagger {
         ObjectMapper objectMapper = new ObjectMapper();
         Root tagResult = objectMapper.readValue(jsonResponse, Root.class);
 
-        List<ImaggaTag> tags = tagResult.result.tags.stream().limit(TAG_LIMIT).toList();
+        List<ImaggaTag> tags = tagResult.result.tags.stream().limit(TAG_LIMIT).filter(tag -> tag.confidence > 0.3).toList();
 
         Map<String, Double> tagMap = new HashMap<>();
 
