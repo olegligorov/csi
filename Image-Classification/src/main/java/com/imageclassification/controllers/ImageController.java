@@ -47,17 +47,6 @@ public class ImageController {
                 .build();
     }
 
-    //    @PostMapping
-//    public ResponseEntity<?> fetchImageTags(@RequestParam("imageUrl") String imageUrl, @RequestParam(name = "noCache", required = false, defaultValue = "false") boolean noCache) {
-//        if (!bucket.tryConsume(1)) {
-//            throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
-//        }
-//        Image createdImage = imageService.getImageTags(imageUrl, noCache);
-//
-//        return ResponseEntity.created(
-//                ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri()
-//        ).body(createdImage);
-//    }
     @PostMapping
     public ResponseEntity<?> fetchImageTags(@RequestBody ImageDTO imageDTO, @RequestParam(name = "noCache", required = false, defaultValue = "false") boolean noCache) {
         if (!bucket.tryConsume(1)) {
@@ -81,10 +70,29 @@ public class ImageController {
 //        return imageService.getAllImages();
 //    }
 
+    //    @GetMapping
+//    public ResponseEntity<List<?>> getAllImagesPaged(@RequestParam(name = "order", defaultValue = "desc") String order,
+//                                                @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+//                                                @RequestParam(name = "pageSize", defaultValue = "20") int pageSize) {
+//        validateParameters(order, pageNumber, pageSize);
+//
+//        Sort.Direction direction = Sort.Direction.DESC;
+//        if (order.equalsIgnoreCase("asc")) {
+//            direction = Sort.Direction.ASC;
+//        }
+//
+//        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, direction, "analysedAt");
+//        Page<Image> imagePage = imageService.getAllImagesPaged(pageRequest);
+//        return ResponseEntity.ok(imagePage.getContent());
+//    }
+
     @GetMapping
-    public ResponseEntity<List<?>> getAllImages(@RequestParam(name = "order", defaultValue = "desc") String order,
-                                                @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
-                                                @RequestParam(name = "pageSize", defaultValue = "20") int pageSize) {
+    public ResponseEntity<List<?>> getAllImagesPaged(@RequestParam(name = "order", defaultValue = "desc") String order,
+                                                     @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+                                                     @RequestParam(name = "pageSize", defaultValue = "0") int pageSize) {
+        if (pageNumber == 0 && pageSize == 0) {
+            return ResponseEntity.ok(imageService.getAllImages());
+        }
         validateParameters(order, pageNumber, pageSize);
 
         Sort.Direction direction = Sort.Direction.DESC;
@@ -109,8 +117,8 @@ public class ImageController {
         if (pageNumber < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page number can not be less than 0");
         }
-        if (pageSize < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page size can not be less than 0");
+        if (pageSize < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page size can not be less than 1");
         }
     }
 }
