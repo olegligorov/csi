@@ -165,12 +165,21 @@ public class ImageServiceImpl implements ImageService {
     private SavedImageDTO saveImageAndCalculateChecksum(String imageUrl) throws IOException {
         URL url = new URL(imageUrl);
         String filename = url.getFile();
+
+        String clearedName = filename.substring(filename.lastIndexOf('/') + 1);
+
+        int firstIndexOfParam = clearedName.indexOf('?');
+        if (firstIndexOfParam != -1) {
+            String extension = clearedName.substring(clearedName.lastIndexOf('.'), clearedName.indexOf('?'));
+            String name = clearedName.substring(0, clearedName.lastIndexOf('.')) + clearedName.substring(clearedName.indexOf('?'));
+            clearedName = name + extension;
+        }
 //        since those characters are not allowed as a file name, the name has to be cleared
-        String clearedFilename = filename.substring(filename.lastIndexOf('/') + 1).replaceAll("[<>:\\\\|/?*\"]", "_");
-        byte[] image = downloadImage(imageUrl, url, clearedFilename);
+        clearedName = clearedName.replaceAll("[<>:\\\\|/?*\"]", "_");
+        byte[] image = downloadImage(imageUrl, url, clearedName);
         String checksum = calculateChecksum(image);
 
-        return new SavedImageDTO(checksum, UPLOADS_DIRECTORY + File.separator + clearedFilename);
+        return new SavedImageDTO(checksum, UPLOADS_DIRECTORY + File.separator + clearedName);
     }
 
     private byte[] downloadImage(String imageUrl, URL url, String originalFileName) throws IOException {

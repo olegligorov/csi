@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/csi/api/v1/images")
+//@RequestMapping("/ics/api/v1/images")
 @RequestMapping("/images")
 public class ImageController {
     private final ImageService imageService;
