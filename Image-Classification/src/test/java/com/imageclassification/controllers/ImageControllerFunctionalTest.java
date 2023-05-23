@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 
@@ -252,7 +253,7 @@ class ImageControllerFunctionalTest {
         List<String> tags = List.of("mountains", "landscape");
         given()
                 .spec(reqSpec)
-                .queryParam("tags", tags)
+                .queryParam("tags", String.join(",", tags))
                 .when()
                 .get("/images/tags")
                 .then()

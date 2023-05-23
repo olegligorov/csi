@@ -31,27 +31,16 @@ import java.util.List;
 @RequestMapping("/images")
 public class ImageController {
     private final ImageService imageService;
-    private final Bucket bucket;
-    private static final int REQUESTS_PER_MINUTE = 5;
-    private static final int REQUESTS_REFILL_TIMER = 1;
 
     @Autowired
     public ImageController(ImageService imageService) {
         this.imageService = imageService;
-        /**
-         * Create Throttling bucket that allows only REQUESTS_PER_MINUTE requests every minute (REQUESTS_REFILL_TIMER)
-         */
-        Bandwidth limit = Bandwidth.classic(REQUESTS_PER_MINUTE, Refill.greedy(REQUESTS_PER_MINUTE, Duration.ofMinutes(REQUESTS_REFILL_TIMER)));
-        this.bucket = Bucket.builder()
-                .addLimit(limit)
-                .build();
+
+
     }
 
     @PostMapping
     public ResponseEntity<?> fetchImageTags(@RequestBody ImageDTO imageDTO, @RequestParam(name = "noCache", required = false, defaultValue = "false") boolean noCache) {
-        if (!bucket.tryConsume(1)) {
-            throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
-        }
         Image createdImage = imageService.getImageTags(imageDTO.getUrl(), noCache);
 
         return ResponseEntity.created(

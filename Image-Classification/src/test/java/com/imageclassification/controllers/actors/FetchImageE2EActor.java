@@ -1,12 +1,14 @@
 package com.imageclassification.controllers.actors;
 
 import com.imageclassification.models.Image;
+import com.imageclassification.models.Tag;
 import io.restassured.specification.RequestSpecification;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -49,6 +51,16 @@ public class FetchImageE2EActor {
         List<Image> images = Arrays.stream(given()
                 .when()
                 .get("/images")
+                .as(Image[].class)).toList();
+        return images;
+    }
+
+    public List<Image> getAllImagesWithFetchedTags(Collection<Tag> tagCollection) {
+        List<Image> images = Arrays.stream(given()
+//                .spec(requestSpecification)
+                .queryParam("tags", tagCollection)
+                .when()
+                .get("/images/tags")
                 .as(Image[].class)).toList();
         return images;
     }

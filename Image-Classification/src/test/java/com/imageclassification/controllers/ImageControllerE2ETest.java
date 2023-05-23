@@ -2,6 +2,7 @@ package com.imageclassification.controllers;
 
 import com.imageclassification.controllers.actors.FetchImageE2EActor;
 import com.imageclassification.models.Image;
+import com.imageclassification.models.Tag;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
@@ -10,6 +11,11 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class ImageControllerE2ETest {
 
@@ -44,6 +50,20 @@ public class ImageControllerE2ETest {
         Image getSecondImageWithId = actor.getImageById(secondImage.getId());
         Assertions.assertEquals(secondImage.getChecksum(), getSecondImageWithId.getChecksum());
         Assertions.assertEquals(secondImage.getUrl(), getSecondImageWithId.getUrl());
+
+        List<Image> allImages = actor.getAllImages();
+        boolean firstImageIsInAllImages = false;
+        boolean secondImageIsInAllImages = false;
+        for (var image : allImages) {
+            if (Objects.equals(image.getId(), firstImage.getId())) {
+                firstImageIsInAllImages = true;
+            }
+            else if (Objects.equals(image.getId(), secondImage.getId())) {
+                secondImageIsInAllImages = true;
+            }
+        }
+        boolean imagesAreInAllImages = firstImageIsInAllImages && secondImageIsInAllImages;
+        Assertions.assertTrue(imagesAreInAllImages);
     }
 
 }
