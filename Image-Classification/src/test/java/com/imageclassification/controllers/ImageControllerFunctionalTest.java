@@ -1,8 +1,6 @@
 package com.imageclassification.controllers;
 
-import com.imageclassification.dtos.ImageDTO;
-import com.imageclassification.models.Image;
-import com.imageclassification.models.Tag;
+
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
@@ -13,8 +11,6 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -63,6 +59,30 @@ class ImageControllerFunctionalTest {
     }
 
     @Test
+    public void testFetchCachedImageTags() throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("url", "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg");
+        given()
+                .spec(reqSpec)
+                .queryParam("noCache", true)
+                .body(json.toString())
+                .when()
+                .post("/images")
+                .then()
+                .statusCode(201);
+
+        json.put("url", "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg");
+        given()
+                .spec(reqSpec)
+                .queryParam("noCache", false)
+                .body(json.toString())
+                .when()
+                .post("/images")
+                .then()
+                .statusCode(201);
+    }
+
+    @Test
     public void testFetchInvalidImageTags() throws JSONException {
         JSONObject json = new JSONObject();
         json.put("url", "https://invalidimage.jpg");
@@ -76,27 +96,43 @@ class ImageControllerFunctionalTest {
     }
 
     @Test
-    public void testPostImageAndThenGetImageById() throws JSONException {
+    public void testFetchInvalidImageTagsWithNoCacheTrue() throws JSONException {
         JSONObject json = new JSONObject();
-        json.put("url", "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg");
+        json.put("url", "https://invalidimage.jpg");
         given()
                 .spec(reqSpec)
                 .queryParam("noCache", true)
                 .body(json.toString())
                 .when()
-                .post("/images ")
+                .post("/images")
                 .then()
-                .statusCode(201);
+                .statusCode(400);
+    }
 
-        Long id = 1L;
+    @Test
+    public void testPostImageAndThenGetImageById() throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("url", "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg");
+
+        Response response = given()
+                .spec(reqSpec)
+                .body(json.toString())
+                .when()
+                .post("/images ");
+
+        int imageId = response.then()
+                .extract()
+                .path("id");
+
         given()
-                .pathParam("imageId", id)
+                .pathParam("imageId", imageId)
                 .when()
                 .get("/images/{imageId}")
                 .prettyPeek()
                 .then()
                 .assertThat()
-                .statusCode(200);
+                .statusCode(200)
+                .body("id", equalTo(imageId));
     }
 
     @Test
@@ -127,8 +163,33 @@ class ImageControllerFunctionalTest {
     }
 
     @Test
+    public void testGetAllImagesWithPageNumberZeroAndPageSizeOne() throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("url", "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg");
+        given()
+                .spec(reqSpec)
+                .queryParam("noCache", true)
+                .body(json.toString())
+                .when()
+                .post("/images")
+                .then()
+                .statusCode(201);
+
+        given()
+                .queryParam("order", "asc")
+                .queryParam("pageNumber", 0)
+                .queryParam("pageSize", 1)
+                .when()
+                .get("/images")
+                .then()
+                .statusCode(200)
+                .body("size()", equalTo(1));
+    }
+
+    @Test
     public void testGetAllImagesWithoutPaging() {
         given()
+                .spec(reqSpec)
                 .when()
                 .get("/images")
                 .then()
@@ -139,6 +200,7 @@ class ImageControllerFunctionalTest {
     @Test
     public void testGetAllImagesWithPagingInvalidPageNumber() {
         given()
+                .spec(reqSpec)
                 .queryParam("order", "asc")
                 .queryParam("pageNumber", -1)
                 .queryParam("pageSize", 5)
@@ -149,8 +211,22 @@ class ImageControllerFunctionalTest {
     }
 
     @Test
+    public void testGetAllImagesWithPagingInvalidPageSize() {
+        given()
+                .spec(reqSpec)
+                .queryParam("order", "asc")
+                .queryParam("pageNumber", 1)
+                .queryParam("pageSize", -5)
+                .when()
+                .get("/images")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
     public void testGetAllImagesWithPagingInvalidOrder() {
         given()
+                .spec(reqSpec)
                 .queryParam("order", "invalid")
                 .queryParam("pageNumber", 5)
                 .queryParam("pageSize", 10)
@@ -175,6 +251,7 @@ class ImageControllerFunctionalTest {
 
         List<String> tags = List.of("mountains", "landscape");
         given()
+                .spec(reqSpec)
                 .queryParam("tags", tags)
                 .when()
                 .get("/images/tags")
@@ -186,12 +263,25 @@ class ImageControllerFunctionalTest {
     @Test
     public void testGetAllImagesWithEmptyTagsShouldReturnEmptyList() {
         given()
+                .spec(reqSpec)
                 .queryParam("tags", List.of())
                 .when()
                 .get("/images/tags")
                 .then()
                 .statusCode(200)
-                .body("size()", greaterThanOrEqualTo(0));
+                .body("size()", equalTo(0));
+    }
+
+    @Test
+    public void testGetAllImagesWithInvalidTagsShouldReturnEmptyList() {
+        given()
+                .spec(reqSpec)
+                .queryParam("tags", List.of("invalidtag1", "invalidtags2"))
+                .when()
+                .get("/images/tags")
+                .then()
+                .statusCode(200)
+                .body("size()", equalTo(0));
     }
 
 }

@@ -70,29 +70,14 @@ public class ImageController {
 //        return imageService.getAllImages();
 //    }
 
-    //    @GetMapping
-//    public ResponseEntity<List<?>> getAllImagesPaged(@RequestParam(name = "order", defaultValue = "desc") String order,
-//                                                @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
-//                                                @RequestParam(name = "pageSize", defaultValue = "20") int pageSize) {
-//        validateParameters(order, pageNumber, pageSize);
-//
-//        Sort.Direction direction = Sort.Direction.DESC;
-//        if (order.equalsIgnoreCase("asc")) {
-//            direction = Sort.Direction.ASC;
-//        }
-//
-//        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, direction, "analysedAt");
-//        Page<Image> imagePage = imageService.getAllImagesPaged(pageRequest);
-//        return ResponseEntity.ok(imagePage.getContent());
-//    }
-
     @GetMapping
     public ResponseEntity<List<?>> getAllImagesPaged(@RequestParam(name = "order", defaultValue = "desc") String order,
                                                      @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
-                                                     @RequestParam(name = "pageSize", defaultValue = "0") int pageSize) {
+                                                     @RequestParam(name = "pageSize", defaultValue = "20") int pageSize) {
         if (pageNumber == 0 && pageSize == 0) {
             return ResponseEntity.ok(imageService.getAllImages());
         }
+
         validateParameters(order, pageNumber, pageSize);
 
         Sort.Direction direction = Sort.Direction.DESC;
