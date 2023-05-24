@@ -2,8 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.10'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'checkstyle'
 }
-
 //idea {
 //	module {
 //		downloadJavadoc=true
@@ -39,6 +39,13 @@ dependencies {
 	implementation 'io.rest-assured:rest-assured:4.5.1'
 
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+}
+
+
+checkstyle {
+	toolVersion = '8.12'
+	ignoreFailures = false
+	configFile = file("${rootProject.rootDir}/gradle/static-code-analysis/checkstyle/checkstyle.xml")
 }
 
 tasks.named('test') {
