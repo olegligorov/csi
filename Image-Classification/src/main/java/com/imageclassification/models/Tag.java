@@ -1,6 +1,5 @@
 package com.imageclassification.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -39,4 +38,5 @@ public class Tag {
                 ", tag='" + tag + '\'' +
                 '}';
     }
+
 }

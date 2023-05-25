@@ -7,6 +7,9 @@ import com.imageclassification.repositories.ImageRepository;
 import com.imageclassification.repositories.TagRepository;
 import com.imageclassification.services.ImageService;
 import com.imageclassification.util.ImageTagger;
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Refill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +27,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,11 +44,24 @@ public class ImageServiceImpl implements ImageService {
     private final ImageTagger imageTagger;
     private static final String UPLOADS_DIRECTORY = "." + File.separator + "uploads";
 
+    private final Bucket bucket;
+    private static final int REQUESTS_PER_MINUTE = 5;
+    private static final int REQUESTS_REFILL_TIMER = 1;
+
+
     @Autowired
     public ImageServiceImpl(ImageRepository imageRepository, TagRepository tagRepository, ImageTagger imageTagger) {
         this.imageRepository = imageRepository;
         this.tagRepository = tagRepository;
         this.imageTagger = imageTagger;
+
+        /**
+         * Create Throttling bucket that allows only REQUESTS_PER_MINUTE requests every minute (REQUESTS_REFILL_TIMER)
+         */
+        Bandwidth limit = Bandwidth.classic(REQUESTS_PER_MINUTE, Refill.greedy(REQUESTS_PER_MINUTE, Duration.ofMinutes(REQUESTS_REFILL_TIMER)));
+        this.bucket = Bucket.builder()
+                .addLimit(limit)
+                .build();
     }
 
     @Override
@@ -108,8 +125,12 @@ public class ImageServiceImpl implements ImageService {
 
         int imageWidth = imageDimensions.get(0);
         int imageHeight = imageDimensions.get(1);
-        String imageTaggerServiceName = imageTagger.getServiceName();
 
+        if (!bucket.tryConsume(1)) {
+            throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
+        }
+
+        String imageTaggerServiceName = imageTagger.getServiceName();
         Map<String, Double> tags = new HashMap<>();
         try {
             tags = imageTagger.getImageTags(imageUrl);
@@ -164,12 +185,21 @@ public class ImageServiceImpl implements ImageService {
     private SavedImageDTO saveImageAndCalculateChecksum(String imageUrl) throws IOException {
         URL url = new URL(imageUrl);
         String filename = url.getFile();
+
+        String clearedName = filename.substring(filename.lastIndexOf('/') + 1);
+
+        int firstIndexOfParam = clearedName.indexOf('?');
+        if (firstIndexOfParam != -1) {
+            String extension = clearedName.substring(clearedName.lastIndexOf('.'), clearedName.indexOf('?'));
+            String name = clearedName.substring(0, clearedName.lastIndexOf('.')) + clearedName.substring(clearedName.indexOf('?'));
+            clearedName = name + extension;
+        }
 //        since those characters are not allowed as a file name, the name has to be cleared
-        String clearedFilename = filename.substring(filename.lastIndexOf('/') + 1).replaceAll("[<>:\\\\|/?*\"]", "_");
-        byte[] image = downloadImage(imageUrl, url, clearedFilename);
+        clearedName = clearedName.replaceAll("[<>:\\\\|/?*\"]", "_");
+        byte[] image = downloadImage(imageUrl, url, clearedName);
         String checksum = calculateChecksum(image);
 
-        return new SavedImageDTO(checksum, UPLOADS_DIRECTORY + File.separator + clearedFilename);
+        return new SavedImageDTO(checksum, UPLOADS_DIRECTORY + File.separator + clearedName);
     }
 
     private byte[] downloadImage(String imageUrl, URL url, String originalFileName) throws IOException {
@@ -180,7 +210,7 @@ public class ImageServiceImpl implements ImageService {
                 uploads.mkdirs();
             }
 
-            Path file = null;
+            Path file;
             if (!Files.exists(Path.of(UPLOADS_DIRECTORY + File.separator + originalFileName))) {
                 file = Files.createFile(Path.of(UPLOADS_DIRECTORY + File.separator + originalFileName));
             } else {

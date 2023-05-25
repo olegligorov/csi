@@ -3,9 +3,6 @@ package com.imageclassification.controllers;
 import com.imageclassification.dtos.ImageDTO;
 import com.imageclassification.models.Image;
 import com.imageclassification.services.ImageService;
-import io.github.bucket4j.Bandwidth;
-import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Refill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,47 +19,24 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/csi/api/v1/images")
+//@RequestMapping("/ics/api/v1/images")
 @RequestMapping("/images")
 public class ImageController {
     private final ImageService imageService;
-    private final Bucket bucket;
-    private static final int REQUESTS_PER_MINUTE = 5;
-    private static final int REQUESTS_REFILL_TIMER = 1;
 
     @Autowired
     public ImageController(ImageService imageService) {
         this.imageService = imageService;
-        /**
-         * Create Throttling bucket that allows only REQUESTS_PER_MINUTE requests every minute (REQUESTS_REFILL_TIMER)
-         */
-        Bandwidth limit = Bandwidth.classic(REQUESTS_PER_MINUTE, Refill.greedy(REQUESTS_PER_MINUTE, Duration.ofMinutes(REQUESTS_REFILL_TIMER)));
-        this.bucket = Bucket.builder()
-                .addLimit(limit)
-                .build();
+
+
     }
 
-    //    @PostMapping
-//    public ResponseEntity<?> fetchImageTags(@RequestParam("imageUrl") String imageUrl, @RequestParam(name = "noCache", required = false, defaultValue = "false") boolean noCache) {
-//        if (!bucket.tryConsume(1)) {
-//            throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
-//        }
-//        Image createdImage = imageService.getImageTags(imageUrl, noCache);
-//
-//        return ResponseEntity.created(
-//                ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand().toUri()
-//        ).body(createdImage);
-//    }
     @PostMapping
     public ResponseEntity<?> fetchImageTags(@RequestBody ImageDTO imageDTO, @RequestParam(name = "noCache", required = false, defaultValue = "false") boolean noCache) {
-        if (!bucket.tryConsume(1)) {
-            throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
-        }
         Image createdImage = imageService.getImageTags(imageDTO.getUrl(), noCache);
 
         return ResponseEntity.created(
@@ -82,9 +56,13 @@ public class ImageController {
 //    }
 
     @GetMapping
-    public ResponseEntity<List<?>> getAllImages(@RequestParam(name = "order", defaultValue = "desc") String order,
-                                                @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
-                                                @RequestParam(name = "pageSize", defaultValue = "20") int pageSize) {
+    public ResponseEntity<List<?>> getAllImagesPaged(@RequestParam(name = "order", defaultValue = "desc") String order,
+                                                     @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+                                                     @RequestParam(name = "pageSize", defaultValue = "20") int pageSize) {
+        if (pageNumber == 0 && pageSize == 0) {
+            return ResponseEntity.ok(imageService.getAllImages());
+        }
+
         validateParameters(order, pageNumber, pageSize);
 
         Sort.Direction direction = Sort.Direction.DESC;
@@ -109,8 +87,8 @@ public class ImageController {
         if (pageNumber < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page number can not be less than 0");
         }
-        if (pageSize < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page size can not be less than 0");
+        if (pageSize < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page size can not be less than 1");
         }
     }
 }

@@ -22,8 +22,7 @@ public class ImaggaIntegration implements ImageTagger {
     private static final String ENDPOINT_URL = "https://api.imagga.com/v2/tags";
     private static final int TAG_LIMIT = 5;
 
-    public Map<String, Double> getImageTags(String imageUrl) throws IOException {
-//        String credentialsToEncode = Secret.API_KEY + ":" + Secret.API_SECRET;
+    public String fetchTags(String imageUrl) throws IOException {
         String credentialsToEncode = System.getenv("IMAGGA_API_KEY") + ":" + System.getenv("IMAGGA_API_SECRET");
 
         String basicAuth = Base64.getEncoder().encodeToString(credentialsToEncode.getBytes(StandardCharsets.UTF_8));
@@ -44,7 +43,11 @@ public class ImaggaIntegration implements ImageTagger {
             jsonResponse = connectionInput.readLine();
 //        connectionInput.close();
         }
+        return jsonResponse;
+    }
 
+    public Map<String, Double> getImageTags(String imageUrl) throws IOException {
+        String jsonResponse = fetchTags(imageUrl);
         //Parse the jsonResponse to a Set of tags.
         ObjectMapper objectMapper = new ObjectMapper();
         Root tagResult = objectMapper.readValue(jsonResponse, Root.class);
