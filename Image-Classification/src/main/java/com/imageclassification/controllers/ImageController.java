@@ -3,9 +3,6 @@ package com.imageclassification.controllers;
 import com.imageclassification.dtos.ImageDTO;
 import com.imageclassification.models.Image;
 import com.imageclassification.services.ImageService;
-import io.github.bucket4j.Bandwidth;
-import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Refill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 

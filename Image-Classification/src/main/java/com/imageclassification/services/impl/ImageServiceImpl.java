@@ -107,7 +107,6 @@ public class ImageServiceImpl implements ImageService {
         }
 
 //        Optional<Image> image = imageRepository.findByUrl(imageUrl);
-//        TODO first check for noCache and then do the request to the database
         Optional<Image> image = imageRepository.findByChecksum(imageChecksum);
         if (image.isPresent()) {
             createdImage = image.get();

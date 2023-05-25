@@ -2,20 +2,16 @@ package com.imageclassification.controllers;
 
 import com.imageclassification.controllers.actors.FetchImageE2EActor;
 import com.imageclassification.models.Image;
-import com.imageclassification.models.Tag;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class ImageControllerE2ETest {
 
@@ -65,5 +61,4 @@ public class ImageControllerE2ETest {
         boolean imagesAreInAllImages = firstImageIsInAllImages && secondImageIsInAllImages;
         Assertions.assertTrue(imagesAreInAllImages);
     }
-
 }
