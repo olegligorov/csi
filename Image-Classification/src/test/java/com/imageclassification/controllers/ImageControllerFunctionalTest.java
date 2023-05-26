@@ -1,6 +1,7 @@
 package com.imageclassification.controllers;
 
 
+import com.imageclassification.models.Image;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
@@ -9,8 +10,10 @@ import io.restassured.specification.RequestSpecification;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +26,7 @@ class ImageControllerFunctionalTest {
     private static RequestSpecBuilder builder;
     private static RequestSpecification reqSpec;
 
-    @BeforeAll
+    @BeforeEach
     static void setUp() {
         builder = new RequestSpecBuilder();
         builder.setBaseUri("http://localhost");
@@ -284,5 +287,4 @@ class ImageControllerFunctionalTest {
                 .statusCode(200)
                 .body("size()", equalTo(0));
     }
-
 }
