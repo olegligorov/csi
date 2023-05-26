@@ -114,7 +114,7 @@ class ImageServiceImplTest {
     @Test
     void testGetImageByIdOfAnExistingImage() {
         Long imageId = 1L;
-        Image expectedImage = new Image("https://docs.imagga.com/static/images/docs/sample/japeean-605234_1280.jpg", "checksum", "savedPath", "Imagga", new HashMap<>(), 1280, 850);
+        Image expectedImage = new Image("https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg", "checksum", "savedPath", "Imagga", new HashMap<>(), 1280, 850);
         when(imageRepository.findById(imageId)).thenReturn(Optional.of(expectedImage));
 
         Image result = imageService.getImageById(imageId);
