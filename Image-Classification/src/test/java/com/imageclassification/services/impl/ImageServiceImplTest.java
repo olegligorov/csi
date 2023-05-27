@@ -2,6 +2,7 @@ package com.imageclassification.services.impl;
 
 import com.imageclassification.dtos.SavedImageDTO;
 import com.imageclassification.models.Image;
+import com.imageclassification.models.ImageTaggerEntity;
 import com.imageclassification.models.Tag;
 import com.imageclassification.repositories.ImageClassifierRepository;
 import com.imageclassification.repositories.ImageRepository;
@@ -44,11 +45,13 @@ class ImageServiceImplTest {
     private ImageClassifierRepository imageClassifierRepository;
 
     private ImageService imageService;
+    private ImageTaggerEntity imageTaggerServiceEntity;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         imageService = new ImageServiceImpl(imageRepository, tagRepository, imageTagger, imageClassifierRepository);
+        imageTaggerServiceEntity = new ImageTaggerEntity("Imagga", 1000, 5);
     }
 
     @Test
@@ -87,8 +90,9 @@ class ImageServiceImplTest {
     @Test
     void testGetImageTagsWithCachedImageReturnsCachedImage() {
         String imageUrl = "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg";
-        Image cachedImage = new Image(imageUrl, "checksum", "path", "Imagga", new HashMap<>(), 800, 600);
+        Image cachedImage = new Image(imageUrl, "checksum", "path", imageTaggerServiceEntity, new HashMap<>(), 800, 600);
         when(imageRepository.findByChecksum(anyString())).thenReturn(Optional.of(cachedImage));
+        when(imageClassifierRepository.findByImageTaggerName(anyString())).thenReturn(Optional.of(imageTaggerServiceEntity));
 
         Image result = imageService.getImageTags(imageUrl, false);
 
@@ -99,13 +103,15 @@ class ImageServiceImplTest {
     void getImageTagsWithoutCacheReturnsNewlyCreatedImage() throws IOException {
         String imageUrl = "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg";
 
-        Image savedImage = new Image(imageUrl, "checksum", "savedPath", "taggerService", new HashMap<>(), 1280, 850);
+        Image savedImage = new Image(imageUrl, "checksum", "savedPath", imageTaggerServiceEntity, new HashMap<>(), 1280, 850);
 
         when(imageRepository.findByChecksum(anyString())).thenReturn(Optional.empty());
         when(imageTagger.getServiceName()).thenReturn("Imagga");
         when(imageTagger.getImageTags(imageUrl)).thenReturn(new HashMap<>());
         when(imageRepository.save(any(Image.class))).thenReturn(savedImage);
         when(tagRepository.findByTag(anyString())).thenReturn(Optional.empty());
+        when(imageClassifierRepository.findByImageTaggerName(anyString())).thenReturn(Optional.of(imageTaggerServiceEntity));
+        when(imageClassifierRepository.save(any())).thenReturn(imageTaggerServiceEntity);
 
         Image result = imageService.getImageTags(imageUrl, true);
 
@@ -117,8 +123,10 @@ class ImageServiceImplTest {
     @Test
     void testGetImageByIdOfAnExistingImage() {
         Long imageId = 1L;
-        Image expectedImage = new Image("https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg", "checksum", "savedPath", "Imagga", new HashMap<>(), 1280, 850);
+        Image expectedImage = new Image("https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg",
+                "checksum", "savedPath", imageTaggerServiceEntity, new HashMap<>(), 1280, 850);
         when(imageRepository.findById(imageId)).thenReturn(Optional.of(expectedImage));
+        when(imageClassifierRepository.findByImageTaggerName(anyString())).thenReturn(Optional.of(imageTaggerServiceEntity));
 
         Image result = imageService.getImageById(imageId);
 

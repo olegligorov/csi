@@ -2,7 +2,7 @@ package com.imageclassification.services.impl;
 
 import com.imageclassification.dtos.SavedImageDTO;
 import com.imageclassification.models.Image;
-import com.imageclassification.models.ImageClassifierEntity;
+import com.imageclassification.models.ImageTaggerEntity;
 import com.imageclassification.models.Tag;
 import com.imageclassification.repositories.ImageClassifierRepository;
 import com.imageclassification.repositories.ImageRepository;
@@ -134,7 +134,7 @@ public class ImageServiceImpl implements ImageService {
             throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
         }
         String imageTaggerServiceName = imageTagger.getServiceName();
-//        incrementTaggerServiceRequests(imageTaggerServiceName);
+        ImageTaggerEntity imageTaggerServiceEntity = incrementTaggerServiceRequests(imageTaggerServiceName);
 
         Map<String, Double> tags = new HashMap<>();
         try {
@@ -144,8 +144,10 @@ public class ImageServiceImpl implements ImageService {
         }
 
         Map<Tag, Double> tagMap = new HashMap<>();
+
+
         if (imageIsPresent == false) {
-            createdImage = imageRepository.save(new Image(imageUrl, imageChecksum, imagePath, imageTaggerServiceName, tagMap, imageWidth, imageHeight));
+            createdImage = imageRepository.save(new Image(imageUrl, imageChecksum, imagePath, imageTaggerServiceEntity, tagMap, imageWidth, imageHeight));
 //            createdImage = imageRepository.save(new Image(imageUrl, imageTaggerServiceName, tagMap, imageWidth, imageHeight));
         }
 
@@ -161,6 +163,9 @@ public class ImageServiceImpl implements ImageService {
         }
 
         createdImage.setAnalysedAt(LocalDateTime.now());
+        createdImage.setAnalysedByService(imageTaggerServiceEntity);
+        imageTaggerServiceEntity.setLastUsed(LocalDateTime.now());
+        imageClassifierRepository.save(imageTaggerServiceEntity);
         return imageRepository.save(createdImage);
     }
 
@@ -230,19 +235,19 @@ public class ImageServiceImpl implements ImageService {
         return DigestUtils.md5DigestAsHex(data);
     }
 
-//    private void incrementTaggerServiceRequests(String imageTaggerServiceName) {
-//        Optional<ImageClassifierEntity> imageClassifierEntity = imageClassifierRepository.findByImageClassifierName(imageTaggerServiceName);
-//        ImageClassifierEntity imageClassifier = null;
-//
-//        if (imageClassifierEntity.isPresent()) {
-//            imageClassifier = imageClassifierEntity.get();
-//        } else {
-//            int imageTaggerLimit = imageTagger.getServiceLimit();
-//            imageClassifier = imageClassifierRepository.save(new ImageClassifierEntity(imageTaggerServiceName, 0, imageTaggerLimit));
-//        }
-//
-//        int currentRequests = imageClassifier.getCurrentRequests();
-//        imageClassifier.setCurrentRequests(currentRequests + 1);
-//        imageClassifierRepository.save(imageClassifier);
-//    }
+    private ImageTaggerEntity incrementTaggerServiceRequests(String imageTaggerServiceName) {
+        Optional<ImageTaggerEntity> imageClassifierEntity = imageClassifierRepository.findByImageTaggerName(imageTaggerServiceName);
+        ImageTaggerEntity imageClassifier = null;
+
+        if (imageClassifierEntity.isPresent()) {
+            imageClassifier = imageClassifierEntity.get();
+        } else {
+            int imageTaggerLimit = imageTagger.getServiceLimit();
+            imageClassifier = imageClassifierRepository.save(new ImageTaggerEntity(imageTaggerServiceName, 0, imageTaggerLimit));
+        }
+
+        int currentRequests = imageClassifier.getCurrentRequests();
+        imageClassifier.setCurrentRequests(currentRequests + 1);
+        return imageClassifierRepository.save(imageClassifier);
+    }
 }

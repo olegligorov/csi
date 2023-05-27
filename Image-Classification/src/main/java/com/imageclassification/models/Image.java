@@ -1,5 +1,6 @@
 package com.imageclassification.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -14,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -42,7 +44,11 @@ public class Image {
     private String imagePath;
 
     private LocalDateTime analysedAt;
-    private String analysedByService;
+
+    @ManyToOne
+    @JoinColumn(name = "image_tagger_id")
+    @JsonIgnore
+    private ImageTaggerEntity analysedByService;
 
     @ElementCollection
     @CollectionTable(name = "image_tag",
@@ -54,7 +60,7 @@ public class Image {
     private int width;
     private int height;
 
-    public Image(String url, String analysedByService, Map<Tag, Double> tags, int width, int height) {
+    public Image(String url, ImageTaggerEntity analysedByService, Map<Tag, Double> tags, int width, int height) {
         this.url = url;
         this.analysedByService = analysedByService;
         this.tags = tags;
@@ -63,7 +69,7 @@ public class Image {
         analysedAt = LocalDateTime.now();
     }
 
-    public Image(String url, String checksum, String imagePath, String analysedByService, Map<Tag, Double> tags, int width, int height) {
+    public Image(String url, String checksum, String imagePath, ImageTaggerEntity analysedByService, Map<Tag, Double> tags, int width, int height) {
         this.url = url;
         this.checksum = checksum;
         this.imagePath = imagePath;
