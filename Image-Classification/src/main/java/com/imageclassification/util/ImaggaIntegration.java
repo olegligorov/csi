@@ -19,6 +19,7 @@ import java.util.Map;
 @Service
 public class ImaggaIntegration implements ImageTagger {
     private static final String SERVICE_NAME = "Imagga";
+    private static final int SERVICE_LIMIT = 1000;
     private static final String ENDPOINT_URL = "https://api.imagga.com/v2/tags";
     private static final int TAG_LIMIT = 5;
 
@@ -66,5 +67,10 @@ public class ImaggaIntegration implements ImageTagger {
     @Override
     public String getServiceName() {
         return SERVICE_NAME;
+    }
+
+    @Override
+    public int getServiceLimit() {
+        return SERVICE_LIMIT;
     }
 }

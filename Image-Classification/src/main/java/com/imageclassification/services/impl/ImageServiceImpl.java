@@ -129,8 +129,8 @@ public class ImageServiceImpl implements ImageService {
         if (!bucket.tryConsume(1)) {
             throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
         }
-
         String imageTaggerServiceName = imageTagger.getServiceName();
+
         Map<String, Double> tags = new HashMap<>();
         try {
             tags = imageTagger.getImageTags(imageUrl);
@@ -181,7 +181,6 @@ public class ImageServiceImpl implements ImageService {
         return imageRepository.findImagesByTags(tagSet, tagSet.size());
     }
 
-
     private SavedImageDTO saveImageAndCalculateChecksum(String imageUrl) throws IOException {
         URL url = new URL(imageUrl);
         String filename = url.getFile();
@@ -225,5 +224,4 @@ public class ImageServiceImpl implements ImageService {
     private String calculateChecksum(byte[] data) {
         return DigestUtils.md5DigestAsHex(data);
     }
-
 }

@@ -27,7 +27,7 @@ class ImageControllerFunctionalTest {
     private static RequestSpecification reqSpec;
 
     @BeforeEach
-    static void setUp() {
+    void setUp() {
         builder = new RequestSpecBuilder();
         builder.setBaseUri("http://localhost");
         builder.setContentType(ContentType.JSON);

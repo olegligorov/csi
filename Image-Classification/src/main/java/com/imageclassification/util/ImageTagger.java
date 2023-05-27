@@ -6,4 +6,5 @@ import java.util.Map;
 public interface ImageTagger {
     Map<String, Double> getImageTags(String imageUrl) throws IOException;
     String getServiceName();
+    int getServiceLimit();
 }
