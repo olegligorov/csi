@@ -3,7 +3,6 @@ package com.imageclassification.services.impl;
 import com.imageclassification.dtos.SavedImageDTO;
 import com.imageclassification.models.Image;
 import com.imageclassification.models.Tag;
-import com.imageclassification.repositories.ImageClassifierRepository;
 import com.imageclassification.repositories.ImageRepository;
 import com.imageclassification.repositories.TagRepository;
 import com.imageclassification.services.ImageService;
@@ -40,15 +39,13 @@ class ImageServiceImplTest {
     private TagRepository tagRepository;
     @Mock
     private ImageTagger imageTagger;
-    @Mock
-    private ImageClassifierRepository imageClassifierRepository;
 
     private ImageService imageService;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        imageService = new ImageServiceImpl(imageRepository, tagRepository, imageTagger, imageClassifierRepository);
+        imageService = new ImageServiceImpl(imageRepository, tagRepository, imageTagger);
     }
 
     @Test

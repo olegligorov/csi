@@ -2,9 +2,7 @@ package com.imageclassification.services.impl;
 
 import com.imageclassification.dtos.SavedImageDTO;
 import com.imageclassification.models.Image;
-import com.imageclassification.models.ImageClassifierEntity;
 import com.imageclassification.models.Tag;
-import com.imageclassification.repositories.ImageClassifierRepository;
 import com.imageclassification.repositories.ImageRepository;
 import com.imageclassification.repositories.TagRepository;
 import com.imageclassification.services.ImageService;
@@ -44,7 +42,6 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
     private final TagRepository tagRepository;
     private final ImageTagger imageTagger;
-    private final ImageClassifierRepository imageClassifierRepository;
     private static final String UPLOADS_DIRECTORY = "." + File.separator + "uploads";
 
     private final Bucket bucket;
@@ -53,11 +50,10 @@ public class ImageServiceImpl implements ImageService {
 
 
     @Autowired
-    public ImageServiceImpl(ImageRepository imageRepository, TagRepository tagRepository, ImageTagger imageTagger, ImageClassifierRepository imageClassifierRepository) {
+    public ImageServiceImpl(ImageRepository imageRepository, TagRepository tagRepository, ImageTagger imageTagger) {
         this.imageRepository = imageRepository;
         this.tagRepository = tagRepository;
         this.imageTagger = imageTagger;
-        this.imageClassifierRepository = imageClassifierRepository;
 
         /**
          * Create Throttling bucket that allows only REQUESTS_PER_MINUTE requests every minute (REQUESTS_REFILL_TIMER)
@@ -134,7 +130,6 @@ public class ImageServiceImpl implements ImageService {
             throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
         }
         String imageTaggerServiceName = imageTagger.getServiceName();
-//        incrementTaggerServiceRequests(imageTaggerServiceName);
 
         Map<String, Double> tags = new HashMap<>();
         try {
@@ -229,20 +224,4 @@ public class ImageServiceImpl implements ImageService {
     private String calculateChecksum(byte[] data) {
         return DigestUtils.md5DigestAsHex(data);
     }
-
-//    private void incrementTaggerServiceRequests(String imageTaggerServiceName) {
-//        Optional<ImageClassifierEntity> imageClassifierEntity = imageClassifierRepository.findByImageClassifierName(imageTaggerServiceName);
-//        ImageClassifierEntity imageClassifier = null;
-//
-//        if (imageClassifierEntity.isPresent()) {
-//            imageClassifier = imageClassifierEntity.get();
-//        } else {
-//            int imageTaggerLimit = imageTagger.getServiceLimit();
-//            imageClassifier = imageClassifierRepository.save(new ImageClassifierEntity(imageTaggerServiceName, 0, imageTaggerLimit));
-//        }
-//
-//        int currentRequests = imageClassifier.getCurrentRequests();
-//        imageClassifier.setCurrentRequests(currentRequests + 1);
-//        imageClassifierRepository.save(imageClassifier);
-//    }
 }
