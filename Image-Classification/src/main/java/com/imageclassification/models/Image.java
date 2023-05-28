@@ -47,7 +47,7 @@ public class Image {
 
     @ManyToOne
     @JoinColumn(name = "image_tagger_id")
-    @JsonIgnore
+//    @JsonIgnore
     private ImageTaggerEntity analysedByService;
 
     @ElementCollection
