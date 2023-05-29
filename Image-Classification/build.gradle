@@ -41,13 +41,6 @@ dependencies {
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 }
 
-
-checkstyle {
-	toolVersion = '8.12'
-	ignoreFailures = false
-	configFile = file("${rootProject.rootDir}/gradle/static-code-analysis/checkstyle/checkstyle.xml")
-}
-
 tasks.named('test') {
 	useJUnitPlatform()
 }
