@@ -1,0 +1,17 @@
+<div class="image-page-container">
+    <img src="{{ image?.url }}" alt="photo">
+
+    <div class="image-page-data">
+        <div class="image-page-tags">
+            <div *ngFor="let tag of image?.tags | keyvalue" class="image-page-tag">
+                <p>
+                    {{ tag.key }}: {{ tag.value }}%
+                </p>
+            </div>
+        </div>
+
+
+        <h4>Analysed at: {{ image?.analysedAt | date }} </h4>
+    </div>
+
+</div>

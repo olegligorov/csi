@@ -1,0 +1,28 @@
+<div class="submit-page-container">
+    <h2 class="submit-page-container-heading">Point to an image to tag</h2>
+    <form (ngSubmit)="onSubmit()" class="submit-page-form">
+        <div>
+            <div>
+                <label for="url"></label>
+                <input class="submit-page-url-input" type="text" name="url" [(ngModel)]="url" placeholder="Enter image url to analyze it">
+            </div>
+
+            <div *ngIf="hasError" class="alert alert-danger">
+                <div class="submit-page-error-message alert-items">
+                    <div class="alert-item static">
+                        <div class="alert-icon-wrapper">
+                            <cds-icon class="alert-icon" shape="exclamation-circle"></cds-icon>
+                        </div>
+                        <span class="alert-text">{{ errorMessage }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="submit-page-checkbox-container">
+                <label for="noCache">Analyse again if the image already exists </label>
+                <input type="checkbox" name="noCache" [(ngModel)] = "noCache" value="true">
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Analyse Image</button>
+    </form>
+</div>

@@ -1,0 +1,32 @@
+.image-page-container {
+    padding: 4rem 7rem;
+}
+
+img {
+    width: 600px;
+    border-radius: 5px;
+}
+
+.image-page-container {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.image-page-tags {
+    display: flex;
+    gap: 1rem;
+    width: 20rem;
+    flex-wrap: wrap;
+}
+
+.image-page-tags .image-page-tag {
+    background: #F3F4F6FF; 
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin: 0;
+}
+
+.image-page-tag p {
+    margin: 0;
+}

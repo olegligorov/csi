@@ -106,13 +106,17 @@ public class ImageServiceImpl implements ImageService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while downloading image");
         }
 
-//        Optional<Image> image = imageRepository.findByUrl(imageUrl);
         Optional<Image> image = imageRepository.findByChecksum(imageChecksum);
         if (image.isPresent()) {
             createdImage = image.get();
             imageIsPresent = true;
             if (!noCache) {
                 return createdImage;
+            }
+        } else if (!noCache) {
+            image = imageRepository.findByUrl(imageUrl);
+            if (image.isPresent()) {
+                return image.get();
             }
         }
 

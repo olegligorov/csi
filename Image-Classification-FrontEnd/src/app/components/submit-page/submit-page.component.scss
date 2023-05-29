@@ -1,0 +1,64 @@
+.submit-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.submit-page-container form {
+    display: flex;
+}
+
+.submit-page-container-heading {
+    margin: 0.5rem;
+    font-weight: 500;
+}
+
+.btn {
+    margin: 0;
+    padding: 0 12px;
+    color: #FFFFFFFF;
+    // background: #00BDD6FF;
+    opacity: 1;
+    border: none;
+    border-radius: 4px;
+    height: 2rem; 
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.submit-page-url-input {
+    padding-left: 40px;
+    height: 2rem;
+    width: 25rem;
+    background: #F3F4F6FF; 
+    border-radius: 4px; 
+    border-width: 0px; 
+    outline: none; 
+    box-sizing: border-box;
+    
+    background-image: url(https://www.pngarea.com/pngm/109/1164446_searchicon-png-search-icon-png-download.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    outline: 0;
+    background-position: 13px;
+    background-size: 14px;
+}
+
+.submit-page-checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.submit-page-checkbox-container input {
+    margin: 2px 0 0;
+    line-height: normal;
+    width: 14px;
+    height: 14px;
+}
