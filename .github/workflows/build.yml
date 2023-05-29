@@ -28,3 +28,14 @@ jobs:
         
       - name: Execute Gradle build
         run: ./Image-Classification/gradlew build
+        
+      - name: Create artifact
+        run: |
+          mkdir artifact
+          cp Image-Classification/build/libs/*.jar artifact/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: artifact
