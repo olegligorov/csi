@@ -20,8 +20,8 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
           
-      - name: Init gradle
-        run: ./Image-Classification/gradlew init
-
-      - name: Build with tests
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action/@v2
+      
+      - name: Execute Gradle build
         run: ./Image-Classification/gradlew build
