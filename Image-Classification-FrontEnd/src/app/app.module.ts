@@ -11,10 +11,13 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SubmitPageComponent } from './components/submit-page/submit-page.component';
 import { ImagePageComponent } from './components/image-page/image-page.component';
+import { GalleryPageComponent } from './components/gallery-page/gallery-page.component';
+import { GalleryImageContainerComponent } from './components/gallery-image-container/gallery-image-container.component';
 
 const appRoutes: Routes = [
   {path: '', component: SubmitPageComponent},
   {path: 'images/:imageId', component: ImagePageComponent},
+  {path: 'images', component: GalleryPageComponent}
 ]
 
 @NgModule({
@@ -22,7 +25,9 @@ const appRoutes: Routes = [
     AppComponent,
     HeaderComponent,
     SubmitPageComponent,
-    ImagePageComponent
+    ImagePageComponent,
+    GalleryPageComponent,
+    GalleryImageContainerComponent
   ],
   imports: [
     BrowserModule,

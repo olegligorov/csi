@@ -11,7 +11,7 @@ import { ImageService } from 'src/app/services/image.service';
 export class ImagePageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private imageService: ImageService) {}
-  image: Image | undefined;
+  image!: Image;
 
   ngOnInit(): void {
     const imageId = this.route.snapshot.paramMap.get('imageId');
