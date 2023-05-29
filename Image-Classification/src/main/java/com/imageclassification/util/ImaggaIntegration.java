@@ -58,7 +58,7 @@ public class ImaggaIntegration implements ImageTagger {
         Map<String, Double> tagMap = new HashMap<>();
 
         for (var tag : tags) {
-            tagMap.put(tag.tag.en, tag.confidence);
+            tagMap.put(tag.tag.en, Math.round(tag.confidence * 100.0) / 100.0);
         }
 
         return tagMap;
