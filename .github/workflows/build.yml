@@ -24,18 +24,25 @@ jobs:
         uses: gradle/gradle-build-action/@v2
       
       - name: Init gradle
-        run: ./Image-Classification/gradlew init
+        run: | 
+          cd Image-Classification 
+          ./gradlew init
         
       - name: Execute Gradle build
-        run: ./Image-Classification/gradlew build
+        run: ./gradlew build
         
-      - name: Create artifact
-        run: |
-          mkdir artifact
-          cp Image-Classification/build/libs/*.jar artifact/
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
+      - name: Upload build reports
+        uses: actions/upload-artifact@v3
         with:
-          name: my-artifact
-          path: artifact
+          name: build-reports
+          path: build/reports/
+#       - name: Create artifact
+#         run: |
+#           mkdir artifact
+#           cp Image-Classification/build/libs/*.jar artifact/
+
+#       - name: Upload artifact
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: my-artifact
+#           path: artifact
