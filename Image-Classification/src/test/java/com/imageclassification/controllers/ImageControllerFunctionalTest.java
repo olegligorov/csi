@@ -9,19 +9,23 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
+@ActiveProfiles("test")
 class ImageControllerFunctionalTest {
     private static RequestSpecBuilder builder;
     private static RequestSpecification reqSpec;
@@ -258,7 +262,8 @@ class ImageControllerFunctionalTest {
                 .spec(reqSpec)
                 .queryParam("tags", String.join(",", tags))
                 .when()
-                .get("/images/tags")
+//                .get("/images/tags")
+                .get("/images")
                 .then()
                 .statusCode(200)
                 .body("size()", greaterThanOrEqualTo(1));
@@ -270,7 +275,8 @@ class ImageControllerFunctionalTest {
                 .spec(reqSpec)
                 .queryParam("tags", List.of())
                 .when()
-                .get("/images/tags")
+//                .get("/images/tags")
+                .get("/images")
                 .then()
                 .statusCode(200)
                 .body("size()", equalTo(0));
@@ -282,7 +288,8 @@ class ImageControllerFunctionalTest {
                 .spec(reqSpec)
                 .queryParam("tags", List.of("invalidtag1", "invalidtags2"))
                 .when()
-                .get("/images/tags")
+//                .get("/images/tags")
+                .get("/images")
                 .then()
                 .statusCode(200)
                 .body("size()", equalTo(0));

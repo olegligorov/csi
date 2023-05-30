@@ -12,7 +12,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { SubmitPageComponent } from './components/submit-page/submit-page.component';
 import { ImagePageComponent } from './components/image-page/image-page.component';
 import { GalleryPageComponent } from './components/gallery-page/gallery-page.component';
-import { GalleryImageContainerComponent } from './components/gallery-image-container/gallery-image-container.component';
+import { GalleryImageComponent } from './components/gallery-image/gallery-image.component';
+import { GalleryPageContainerComponent } from './components/gallery-page-container/gallery-page-container.component';
 
 const appRoutes: Routes = [
   {path: '', component: SubmitPageComponent},
@@ -27,7 +28,8 @@ const appRoutes: Routes = [
     SubmitPageComponent,
     ImagePageComponent,
     GalleryPageComponent,
-    GalleryImageContainerComponent
+    GalleryImageComponent,
+    GalleryPageContainerComponent
   ],
   imports: [
     BrowserModule,

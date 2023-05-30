@@ -19,11 +19,14 @@
 
             <a href="{{ image.url }}">{{ image.url }}</a>
 
+
+        <!-- <a routerLink="/images/{{ image.id }}" class="clickable"> -->
+
         </div>
         <div class="image-page-tags">
             <div *ngFor="let tag of image?.tags | keyvalue" class="image-page-tag">
                 <span class="tag-confidence">{{ tag.value }}%</span>
-                <a><span class="tag-name">{{ tag.key }}</span></a>
+                <a routerLink="/images" [queryParams]="{tags: tag.key}"><span class="tag-name">{{ tag.key }}</span></a>
             </div>
         </div>
 

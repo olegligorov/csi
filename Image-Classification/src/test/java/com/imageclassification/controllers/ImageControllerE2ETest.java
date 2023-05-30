@@ -9,10 +9,18 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 import java.util.Objects;
 
+@SpringBootTest
+@ActiveProfiles("test")
+//@TestPropertySource(locations = "classpath:application-test.yaml")
 public class ImageControllerE2ETest {
 
     private static RequestSpecBuilder builder;

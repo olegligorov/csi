@@ -15,7 +15,7 @@ export class SubmitPageComponent {
   noCache: boolean = false;
   image!: Image;
   hasError: boolean = false;
-  errorMessage: string = 's';
+  errorMessage: string = '';
 
   onSubmit(): void {
     console.log("sending!");
@@ -29,8 +29,6 @@ export class SubmitPageComponent {
       this.image = image;
       this.router.navigateByUrl(`images/${this.image.id}`)
     }, error => {
-      // console.log(error);
-      // console.log(error.error.message);
       this.hasError = true;
       this.errorMessage = error.error.message;
       console.log(this.errorMessage);

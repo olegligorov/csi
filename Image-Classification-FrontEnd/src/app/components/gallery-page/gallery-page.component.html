@@ -1,1 +1,21 @@
-<h2>Gallery</h2>
+<div class="gallery-page">
+    <div class="gallery-page-heading">
+    <h2>Gallery</h2>
+
+        <form (ngSubmit)="onSubmitSearchForTags()" class="tag-search-form">
+            <div>
+                <div>
+                    <label for="tagsSearch"></label>
+                    <input class="submit-tags-search-input" type="text" name="tagsSearch" [(ngModel)]="tagsSearch"
+                        placeholder="Enter tags">
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+        <!-- <div>heree {{ tagsSearch }} </div> -->
+    </div>
+    <h5 *ngIf="tags">Showing results for tags: {{ tags }} </h5>
+
+
+    <app-gallery-page-container [images]="images"></app-gallery-page-container>
+</div>

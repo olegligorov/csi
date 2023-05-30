@@ -14,14 +14,10 @@ export class ImageService {
   constructor(private http: HttpClient) { }
 
   addImage(imageUrl: ImageUrl, noCache: boolean): Observable<Image> {
-    console.log("In service!");
-    console.log(imageUrl);
-
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
-      // params: params,
       params: new HttpParams().set("noCache", noCache)
     };
     
@@ -33,4 +29,15 @@ export class ImageService {
     return this.http.get<Image>(endpoint);
   }
 
+  getAllImages(tags: string | null): Observable<Image[]> {
+    if (tags) {
+      return this.getAllImagesWithTags(tags);
+    }
+    return this.http.get<Image[]>(this.apiUrl);
+  }
+
+  getAllImagesWithTags(tags: string | null): Observable<Image[]> {
+    const endpoint = `${this.apiUrl}?tags=${tags}`;
+    return this.http.get<Image[]>(endpoint);
+  }
 }
