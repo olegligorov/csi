@@ -32,13 +32,13 @@ jobs:
         run: |
           cd Image-Classification
           ./gradlew build -x test
-        
+#         delete -x test
       - name: Upload build reports
         uses: actions/upload-artifact@v3
         with:
           name: build-reports
           path: Image-Classification/build/reports/
-#           gradle build -x test
+          
 #       - name: Create artifact
 #         run: |
 #           mkdir artifact
