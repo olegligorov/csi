@@ -16,10 +16,10 @@ h5 {
 
 .gallery-page-heading {
     display: flex;
-    justify-content: space-around;
+    justify-content: left;
     width: 100%;
-    height: 100px;
-    position: relative;
+    margin-bottom: 10px;
+    // position: relative;
 }
 
 .tag-search-form {
@@ -45,14 +45,29 @@ button {
     box-sizing: border-box;
 }
 
-form {
-    position: absolute;
+.form-container {
+    // position: absolute;
     // display: flex;
     margin-top: 10px;
-    top: 0;
-    left: 0;
+    // top: 0;
+    // left: 0;
 }
 
-clr-datalist-container {
-    margin-left: 5px;
+.form-recommended-tags {
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-bottom: 10px;
 }
+
+.form-tag-recommended {
+    background: #F3F4F6FF;
+    padding: 3px 6px;
+    border-radius: 20px;
+}
+
+
+// clr-datalist-container {
+//     margin-left: 5px;
+// }

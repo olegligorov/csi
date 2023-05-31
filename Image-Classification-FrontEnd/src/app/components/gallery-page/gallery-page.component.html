@@ -1,17 +1,21 @@
 <div class="gallery-page">
+    <h2>Gallery</h2>
     <div class="gallery-page-heading">
-        <h2>Gallery</h2>
-
-        <!-- <form (ngSubmit)="onSubmitSearchForTags()" class="tag-search-form">
-            <div>
-                <label for="tagsSearch"></label>
-                <input class="submit-tags-search-input" type="text" name="tagsSearch" [(ngModel)]="tagsSearch"
-                    placeholder="Enter tags">
+        <div class="form-container">
+            <div class="form-recommended-tags">
+                <span *ngFor="let item of recommendedTags" class="form-tag-recommended"> {{ item.tag }}</span>
             </div>
-            <button class="btn btn-primary" type="submit">Search</button>
-        </form> -->
+            <form (ngSubmit)="onSubmitSearchForTags()" class="tag-search-form">
+                <div>
+                    <label for="tagsSearch"></label>
+                    <input class="submit-tags-search-input" type="text" name="tagsSearch" [(ngModel)]="tagsSearch" 
+                    (ngModelChange)="onTagsSearchChange()" placeholder="Enter tags">
+                </div>
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
 
-        <form (ngSubmit)="onSubmitSearchForTags()" clrForm>
+        <!-- <form (ngSubmit)="onSubmitSearchForTags()" clrForm>
 
             <clr-datalist-container class="container">
                 <label for="tagsSearch">Search</label>
@@ -21,11 +25,10 @@
                 </datalist>
             </clr-datalist-container>
             <button class="btn" type="submit">Search</button>
-        </form>
+        </form> -->
         <!-- <div>heree {{ tagsSearch }} </div> -->
     </div>
     <h5 *ngIf="tags">Showing results for tags: {{ tags }} </h5>
-    <!-- <span *ngFor="let item of recommendedTags">{{ item.tag }} </span> -->
 
     <app-gallery-page-container [images]="images"></app-gallery-page-container>
 </div>
