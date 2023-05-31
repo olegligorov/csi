@@ -49,6 +49,7 @@ jobs:
 
       - name: Start Spring application
         run: |
+          find Image-Classification/build/libs/*.jar
           java -jar Image-Classification/build/libs/*.jar
 
       - name: Wait for application to start
