@@ -12,36 +12,38 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment: dev
-    
+
     steps:
       - name: Set up MySQL
         uses: mirromutth/mysql-action@v1.1
         with:
-            host port: 3306 # Optional, default value is 3306. The port of host
-            container port: 3307 # Optional, default value is 3306. The port of container
-            character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
-            collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
-            mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
-            mysql database: 'image_classification' # Optional, default value is "test". The specified database which will be create
-            mysql root password: 'root' # Required if "mysql user" is empty, default is empty. The root superuser password
-            mysql user: 'root' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
-            mysql password: 'root' # Required if "mysql user" exists. The password for the "mysql user"
+          host port: 3306
+          container port: 3307
+          character set server: 'utf8'
+          collation server: 'utf8_general_ci'
+          mysql version: '8.0'
+          mysql database: 'image_classification'
+          mysql root password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          mysql user: 'root'
+          mysql password: 'root'
 
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Set up Java
         uses: actions/setup-java@v1
         with:
           distribution: 'adopt'
           java-version: '17'
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action/@v2
-      
+
       - name: Init gradle
         run: | 
           cd Image-Classification 
           ./gradlew init
-     
+
       - name: Execute Gradle build
         run: |
           cd Image-Classification
@@ -49,15 +51,14 @@ jobs:
 
       - name: Start Spring application
         run: |
-          find Image-Classification/build/libs/*.jar
-          java -jar Image-Classification/build/libs/Image-Classification-0.0.1-SNAPSHOT.jar
-
-      - name: Wait for application to start
-        run: |
-          # Wait for the application to start listening on the required port
+          java -jar Image-Classification/build/libs/Image-Classification-0.0.1-SNAPSHOT.jar &
           sleep 10
 
       - name: Run tests
         run: |
           cd Image-Classification
           ./gradlew test
+
+      - name: Stop Spring application
+        run: |
+          pkill -f 'Image-Classification-0.0.1-SNAPSHOT.jar'
