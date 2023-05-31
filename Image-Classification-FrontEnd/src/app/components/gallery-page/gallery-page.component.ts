@@ -12,41 +12,59 @@ import { Tag } from 'src/app/Tag';
   styleUrls: ['./gallery-page.component.scss']
 })
 export class GalleryPageComponent {
-  constructor(private route: ActivatedRoute, private imageService: ImageService, private tagService: TagService, private router: Router) {
-
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private imageService: ImageService,
+    private tagService: TagService,
+    private router: Router
+  ) { }
 
   images !: Image[];
   tags: string | null | undefined;
-  tagsSearch : string | null = "";
+  tagsSearch: string | null = "";
   recommendedTags !: Tag[];
 
   ngOnInit(): void {
-    this.getRecommendedTags();
-
     this.route.queryParamMap.subscribe(params => {
       this.tags = params.get('tags');
-      
-      this.tagsSearch = this.tags;
-      
+
+      this.tagsSearch = !this.tags ? '' : this.tags;
+
       this.imageService.getAllImages(this.tags).subscribe((images) => {
         this.images = images;
       });
     });
+
+    this.getRecommendedTags('');
+
   }
 
   onSubmitSearchForTags(): void {
-    if(this.tagsSearch) {
+    if (this.tagsSearch) {
       this.router.navigateByUrl(`images?tags=${this.tagsSearch}`)
     } else {
       this.router.navigateByUrl('images')
     }
   }
 
-  getRecommendedTags(): void {
-    this.tagService.getAllTags(this.tagsSearch).subscribe(tags => {
+  getRecommendedTags(prefix: string | null | undefined): void {
+    this.tagService.getAllTags(prefix).subscribe(tags => {
       this.recommendedTags = tags;
+      console.log(this.recommendedTags);
     })
+  }
+
+  private searchTimeout: any;
+
+  onTagsSearchChange() {
+    clearTimeout(this.searchTimeout); // Clear any existing timeout
+
+    this.searchTimeout = setTimeout(() => {
+      console.log('Input value has not changed for 1 seconds');
+      const last_tag = this.tagsSearch?.split(',').pop()?.trim();
+      console.log(last_tag);
+      this.getRecommendedTags(last_tag);
+    }, 1000);
   }
 
 }

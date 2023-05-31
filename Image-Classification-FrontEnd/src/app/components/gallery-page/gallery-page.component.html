@@ -15,18 +15,17 @@
 
             <clr-datalist-container class="container">
                 <label for="tagsSearch">Search</label>
-                <input name="tagsSearch" required clrDatalistInput [(ngModel)]="tagsSearch" placeholder="Enter tags" />
+                <input name="tagsSearch" required clrDatalistInput [(ngModel)]="tagsSearch" (ngModelChange)="onTagsSearchChange()" placeholder="Enter tags" />
                 <datalist>
                     <option *ngFor="let item of recommendedTags" [value]="item.tag"></option>
                 </datalist>
             </clr-datalist-container>
             <button class="btn" type="submit">Search</button>
         </form>
-
         <!-- <div>heree {{ tagsSearch }} </div> -->
     </div>
     <h5 *ngIf="tags">Showing results for tags: {{ tags }} </h5>
-
+    <!-- <span *ngFor="let item of recommendedTags">{{ item.tag }} </span> -->
 
     <app-gallery-page-container [images]="images"></app-gallery-page-container>
 </div>
