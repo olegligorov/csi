@@ -37,6 +37,16 @@ class ImageControllerFunctionalTest {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
 
+//    @Test
+//    public void testFoo() {
+//        given()
+//                .spec(reqSpec)
+//                .when()
+//                .get("/images/test")
+//                .then()
+//                .statusCode(200);
+//    }
+
     @Test
     public void testFetchImageTags() throws JSONException {
         JSONObject json = new JSONObject();

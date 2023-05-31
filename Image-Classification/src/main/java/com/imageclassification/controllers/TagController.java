@@ -3,6 +3,7 @@ package com.imageclassification.controllers;
 import com.imageclassification.models.Tag;
 import com.imageclassification.services.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +24,10 @@ public class TagController {
     }
 
     @GetMapping
-    public List<Tag> getAllTags(@RequestParam(name = "prefix", defaultValue = "") String prefix) {
+    public ResponseEntity<List<Tag>> getAllTags(@RequestParam(name = "prefix", defaultValue = "") String prefix) {
         if (prefix.isBlank()) {
-            return tagService.getAllTags();
+            return ResponseEntity.ok(tagService.getAllTags());
         }
-        return tagService.getTagsStartingWith(prefix);
+        return ResponseEntity.ok(tagService.getTagsStartingWith(prefix));
     }
 }

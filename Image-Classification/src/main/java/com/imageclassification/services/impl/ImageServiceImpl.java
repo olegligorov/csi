@@ -152,8 +152,6 @@ public class ImageServiceImpl implements ImageService {
         Map<Tag, Double> tagMap = new HashMap<>();
         if (imageIsPresent == false) {
             createdImage = imageRepository.save(new Image(imageUrl, imageChecksum, imagePath, imageTaggerServiceEntity, tagMap, imageWidth, imageHeight));
-//            createdImage = imageRepository.save(new Image(imageUrl, imageChecksum, imagePath, imageTaggerServiceName, tagMap, imageWidth, imageHeight));
-//            createdImage = imageRepository.save(new Image(imageUrl, imageTaggerServiceName, tagMap, imageWidth, imageHeight));
         }
 
         for (String tag : tags.keySet()) {

@@ -34,8 +34,6 @@ public class ImageController {
     @Autowired
     public ImageController(ImageService imageService) {
         this.imageService = imageService;
-
-
     }
 
     @PostMapping
@@ -52,6 +50,11 @@ public class ImageController {
         Image image = imageService.getImageById(imageId);
         return ResponseEntity.ok(image);
     }
+
+//    @GetMapping("/test")
+//    public ResponseEntity<?> testing() {
+//        return ResponseEntity.ok("works");
+//    }
 
 //    @GetMapping
 //    public List<Image> getAllImages() {
