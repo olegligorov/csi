@@ -3,7 +3,7 @@
     <div class="gallery-page-heading">
         <div class="form-container">
             <div class="form-recommended-tags">
-                <span *ngFor="let item of recommendedTags" class="form-tag-recommended" (click)="addTagToInput(item.tag)"> {{ item.tag }}</span>
+                <span *ngFor="let item of recommendedTags | slice:0:30" class="form-tag-recommended" (click)="addTagToInput(item.tag)"> {{ item.tag }}</span>
             </div>
             <!-- <form (ngSubmit)="searchImages()" class="tag-search-form"> -->
             <form (ngSubmit)="addCustomTag()" class="tag-search-form">

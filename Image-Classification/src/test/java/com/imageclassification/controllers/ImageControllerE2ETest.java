@@ -20,7 +20,7 @@ import java.util.Objects;
 
 @SpringBootTest
 @ActiveProfiles("test")
-//@TestPropertySource(locations = "classpath:application-test.yaml")
+//@TestPropertySource(locations = "classpath:application.yaml")
 public class ImageControllerE2ETest {
 
     private static RequestSpecBuilder builder;
