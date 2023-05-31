@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Image } from 'src/app/Image';
 import { ImageService } from 'src/app/services/image.service';
 import { Router } from '@angular/router';
+import { TagService } from 'src/app/services/tag.service';
+import { Tag } from 'src/app/Tag';
 
 @Component({
   selector: 'app-gallery-page',
@@ -10,15 +12,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./gallery-page.component.scss']
 })
 export class GalleryPageComponent {
-  constructor(private route: ActivatedRoute, private imageService: ImageService, private router: Router) {
+  constructor(private route: ActivatedRoute, private imageService: ImageService, private tagService: TagService, private router: Router) {
 
   }
 
   images !: Image[];
   tags: string | null | undefined;
-  tagsSearch !: string | null;
+  tagsSearch : string | null = "";
+  recommendedTags !: Tag[];
 
   ngOnInit(): void {
+    this.getRecommendedTags();
+
     this.route.queryParamMap.subscribe(params => {
       this.tags = params.get('tags');
       
@@ -37,4 +42,11 @@ export class GalleryPageComponent {
       this.router.navigateByUrl('images')
     }
   }
+
+  getRecommendedTags(): void {
+    this.tagService.getAllTags(this.tagsSearch).subscribe(tags => {
+      this.recommendedTags = tags;
+    })
+  }
+
 }

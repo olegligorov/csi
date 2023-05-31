@@ -1,7 +1,5 @@
 package com.imageclassification.controllers;
 
-
-import com.imageclassification.models.Image;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
