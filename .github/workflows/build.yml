@@ -51,7 +51,7 @@ jobs:
         run: |
           # Start the Spring application in the background
           find build/libs/*.jar
-          java -jar build/libs/*.jar
+          java -jar Image-Classification/build/libs/*.jar
 
       - name: Wait for application to start
         run: |
