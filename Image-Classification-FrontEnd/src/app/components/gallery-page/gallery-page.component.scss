@@ -11,7 +11,8 @@ h2 {
 }
 
 h5 {
-    margin: 10px 0;
+    margin-top: 0;
+    margin-bottom: 10px;
 }
 
 .gallery-page-heading {
@@ -23,7 +24,9 @@ h5 {
 }
 
 .tag-search-form {
+    width: 100%;
     display: flex;
+    flex-direction: column;
 }
 
 button {
@@ -33,28 +36,28 @@ button {
     align-items: center;
     padding: 0;
     margin: 0;
+    width: 100px;
 }
 
 .submit-tags-search-input {
     height: 30px;
-    background: #F3F4F6FF; 
+    // background: #F3F4F6FF; 
     border-radius: 4px; 
     padding-left: 5px;
     border-width: 0px; 
+    border-bottom: 1px solid silver;
     outline: none; 
     box-sizing: border-box;
+    width: 80%;
 }
 
 .form-container {
-    // position: absolute;
-    // display: flex;
+    width: 100%;
     margin-top: 10px;
-    // top: 0;
-    // left: 0;
 }
 
 .form-recommended-tags {
-    width: 80%;
+    width: 90%;
     display: flex;
     flex-wrap: wrap;
     gap: 3px;
@@ -65,9 +68,54 @@ button {
     background: #F3F4F6FF;
     padding: 3px 6px;
     border-radius: 20px;
+    cursor: pointer;
 }
 
+.submit-tags-search-label {
+    font-weight: 600;
+    margin-right: 10px;
+}
 
-// clr-datalist-container {
-//     margin-left: 5px;
-// }
+.searchbar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.selected-tags {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+    width: 90%;
+}
+
+.selected-tag {
+    display: flex;
+    
+    background:#F3F4F6FF;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.delete-tag {
+    margin-left: 5px;
+    padding-left: 5px;
+    border-left: 1px solid white;
+    cursor: pointer;
+}
+
+.search-by-tags {
+    display: flex;
+    width: 100%;
+}
+
+.clear-tags {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.clear-tags:hover {
+    font-weight: 500;
+    color: black;
+}

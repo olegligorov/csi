@@ -23,12 +23,14 @@ export class GalleryPageComponent {
   tags: string | null | undefined;
   tagsSearch: string | null = "";
   recommendedTags !: Tag[];
+  filterByTags : Set<string> = new Set<string>();
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
       this.tags = params.get('tags');
 
-      this.tagsSearch = !this.tags ? '' : this.tags;
+      this.filterByTags = new Set(this.tags?.split(','));
+      // this.tagsSearch = !this.tags ? '' : this.tags;
 
       this.imageService.getAllImages(this.tags).subscribe((images) => {
         this.images = images;
@@ -39,9 +41,11 @@ export class GalleryPageComponent {
 
   }
 
-  onSubmitSearchForTags(): void {
-    if (this.tagsSearch) {
-      this.router.navigateByUrl(`images?tags=${this.tagsSearch}`)
+  searchImages(): void {
+    const searchForTags = [...this.filterByTags].join(',');
+
+    if (searchForTags) {
+      this.router.navigateByUrl(`images?tags=${searchForTags}`)
     } else {
       this.router.navigateByUrl('images')
     }
@@ -50,13 +54,13 @@ export class GalleryPageComponent {
   getRecommendedTags(prefix: string | null | undefined): void {
     this.tagService.getAllTags(prefix).subscribe(tags => {
       this.recommendedTags = tags;
-      console.log(this.recommendedTags);
+      // console.log(this.recommendedTags);
     })
   }
 
   private searchTimeout: any;
 
-  onTagsSearchChange() {
+  onTagsSearchChange(): void {
     clearTimeout(this.searchTimeout); // Clear any existing timeout
 
     this.searchTimeout = setTimeout(() => {
@@ -65,6 +69,43 @@ export class GalleryPageComponent {
       console.log(last_tag);
       this.getRecommendedTags(last_tag);
     }, 1000);
+  }
+
+  addTagToInput(tag: string | null): void {
+    if (tag) {
+      this.filterByTags.add(tag);
+    }
+
+    this.tagsSearch = '';
+    this.getRecommendedTags(this.tagsSearch);
+
+    // console.log("FILTER BY TAGS!");
+    // console.log(this.filterByTags);
+
+    this.searchImages();
+  }
+
+  deleteTag(tag: string): void {
+    this.filterByTags.delete(tag);
+    
+    console.log("FILTER BY TAGS!");
+    console.log(this.filterByTags);
+
+    this.searchImages();
+  }
+
+  clearTags(): void {
+    this.filterByTags.clear();
+
+    this.searchImages();
+  }
+
+  addCustomTag() {
+    console.log(this.tagsSearch);
+
+    this.addTagToInput(this.tagsSearch);
+
+    this.tagsSearch = '';
   }
 
 }

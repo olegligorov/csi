@@ -3,30 +3,29 @@
     <div class="gallery-page-heading">
         <div class="form-container">
             <div class="form-recommended-tags">
-                <span *ngFor="let item of recommendedTags" class="form-tag-recommended"> {{ item.tag }}</span>
+                <span *ngFor="let item of recommendedTags" class="form-tag-recommended" (click)="addTagToInput(item.tag)"> {{ item.tag }}</span>
             </div>
-            <form (ngSubmit)="onSubmitSearchForTags()" class="tag-search-form">
-                <div>
-                    <label for="tagsSearch"></label>
+            <!-- <form (ngSubmit)="searchImages()" class="tag-search-form"> -->
+            <form (ngSubmit)="addCustomTag()" class="tag-search-form">
+                <div class="searchbar">
+                    <label for="tagsSearch" class="submit-tags-search-label">Search or filter by tag:</label>
                     <input class="submit-tags-search-input" type="text" name="tagsSearch" [(ngModel)]="tagsSearch" 
                     (ngModelChange)="onTagsSearchChange()" placeholder="Enter tags">
+                    <button class="btn btn-primary" type="submit">Add tag</button>
+                
                 </div>
-                <button class="btn btn-primary" type="submit">Search</button>
+                <div class="search-by-tags">
+                    <div class="selected-tags">
+                        <div *ngFor="let selected_tag of filterByTags" class="selected-tag">
+                            <span>{{selected_tag}}</span>
+                            <span class="delete-tag" (click)="deleteTag(selected_tag)">x</span>
+                        </div>
+                        <span *ngIf="filterByTags.size != 0" (click)="clearTags()" class="clear-tags">Clear Tags</span>
+                    </div>
+                    <!-- <button class="btn btn-primary" type="submit">Search</button> -->
+                </div>
             </form>
         </div>
-
-        <!-- <form (ngSubmit)="onSubmitSearchForTags()" clrForm>
-
-            <clr-datalist-container class="container">
-                <label for="tagsSearch">Search</label>
-                <input name="tagsSearch" required clrDatalistInput [(ngModel)]="tagsSearch" (ngModelChange)="onTagsSearchChange()" placeholder="Enter tags" />
-                <datalist>
-                    <option *ngFor="let item of recommendedTags" [value]="item.tag"></option>
-                </datalist>
-            </clr-datalist-container>
-            <button class="btn" type="submit">Search</button>
-        </form> -->
-        <!-- <div>heree {{ tagsSearch }} </div> -->
     </div>
     <h5 *ngIf="tags">Showing results for tags: {{ tags }} </h5>
 
