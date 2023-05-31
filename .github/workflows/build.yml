@@ -3,17 +3,17 @@ name: Java Build project
 on:
   push:
     branches:
-      - '*'
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build-with-tests:
+  build:
     runs-on: ubuntu-latest
     environment: dev
     
     steps:
-      - name: Shutdown Ubuntu MySQL (SUDO)
-        run: sudo service mysql stop 
-#          Shutdown the Default MySQL, "sudo" is necessary, please not remove it
       - name: Set up MySQL
         uses: mirromutth/mysql-action@v1.1
         with:
@@ -26,16 +26,14 @@ jobs:
             mysql root password: 'root' # Required if "mysql user" is empty, default is empty. The root superuser password
             mysql user: 'root' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
             mysql password: 'root' # Required if "mysql user" exists. The password for the "mysql user"
-      
+
       - name: Checkout code
         uses: actions/checkout@v2
-
       - name: Set up Java
         uses: actions/setup-java@v1
         with:
           distribution: 'adopt'
           java-version: '17'
-          
       - name: Setup Gradle
         uses: gradle/gradle-build-action/@v2
       
@@ -43,26 +41,23 @@ jobs:
         run: | 
           cd Image-Classification 
           ./gradlew init
-        
+     
       - name: Execute Gradle build
         run: |
           cd Image-Classification
-          ./gradlew build
-    #      ./gradlew build -x test
-#         delete -x test
-      - name: Upload build reports
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-reports
-          path: Image-Classification/build/reports/
-          
-#       - name: Create artifact
-#         run: |
-#           mkdir artifact
-#           cp Image-Classification/build/libs/*.jar artifact/
+          ./gradlew build   
 
-#       - name: Upload artifact
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: my-artifact
-#           path: artifact
+      - name: Start Spring application
+        run: |
+          # Start the Spring application in the background
+          java -jar build/libs/your-spring-application.jar &
+
+      - name: Wait for application to start
+        run: |
+          # Wait for the application to start listening on the required port
+          sleep 10
+
+      - name: Run tests
+        run: |
+          # Run your tests using Rest Assured
+          ./gradlew test
