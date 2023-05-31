@@ -50,7 +50,7 @@ jobs:
       - name: Start Spring application
         run: |
           # Start the Spring application in the background
-          java -jar build/libs/your-spring-application.jar &
+          java -jar build/libs/your-spring-application.jar & java -jar build/libs/gs-rest-service-0.1.0.jar
 
       - name: Wait for application to start
         run: |
