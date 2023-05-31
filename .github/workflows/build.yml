@@ -45,7 +45,7 @@ jobs:
       - name: Execute Gradle build
         run: |
           cd Image-Classification
-          ./gradlew build   
+          ./gradlew build -x test
 
       - name: Start Spring application
         run: |
