@@ -29,9 +29,6 @@ class ImageControllerFunctionalTest {
     private static RequestSpecBuilder builder;
     private static RequestSpecification reqSpec;
 
-//    @ClassRule
-//    public final EnvironmentVariables environmentVariables = new EnvironmentVariables().set("name", "value");
-
     @BeforeEach
     void setUp() {
         builder = new RequestSpecBuilder();
@@ -40,16 +37,6 @@ class ImageControllerFunctionalTest {
         reqSpec = builder.build();
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
-
-//    @Test
-//    public void testFoo() {
-//        given()
-//                .spec(reqSpec)
-//                .when()
-//                .get("/images/test")
-//                .then()
-//                .statusCode(200);
-//    }
 
     @Test
     public void testFetchImageTags() throws JSONException {
