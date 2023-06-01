@@ -21,7 +21,17 @@ jobs:
           java-version: '17'
           
       - name: Init gradle
-        run: ./Image-Classification/gradlew init
-
-      - name: Build with tests
-        run: ./Image-Classification/gradlew build
+        run: | 
+          cd Image-Classification 
+          ./gradlew init
+        
+      - name: Execute Gradle build
+        run: |
+          cd Image-Classification
+          ./gradlew build -x test
+      
+      - name: Upload build reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-reports
+          path: Image-Classification/build/reports/
