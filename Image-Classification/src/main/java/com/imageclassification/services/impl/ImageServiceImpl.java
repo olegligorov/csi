@@ -181,7 +181,6 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public List<Image> getAllImages() {
-//        return imageRepository.findAllbyOrder
         return imageRepository.findAll();
     }
 

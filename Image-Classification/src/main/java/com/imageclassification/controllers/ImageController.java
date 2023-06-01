@@ -118,8 +118,6 @@ public class ImageController {
 
         validateParameters(pageNumber, pageSize);
 
-
-
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, direction, "analysedAt");
         Page<Image> imagePage = imageService.getAllImagesPaged(pageRequest);
         return ResponseEntity.ok(imagePage.getContent());
