@@ -3,30 +3,14 @@ name: Java Build project
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - '*'
 
 jobs:
-  build:
+  build-with-tests:
     runs-on: ubuntu-latest
-    environment: dev
-
+#     environment: dev
+    
     steps:
-      - name: Set up MySQL
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          host port: 3306
-          container port: 3307
-          character set server: 'utf8'
-          collation server: 'utf8_general_ci'
-          mysql version: '8.0'
-          mysql database: 'image_classification'
-          mysql root password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          mysql user: 'root'
-          mysql password: 'root'
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -35,30 +19,22 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
-
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action/@v2
-
+          
       - name: Init gradle
         run: | 
           cd Image-Classification 
           ./gradlew init
-
+        
       - name: Execute Gradle build
+        env:
+          IMAGGA_API_KEY: ${{ secrets.IMAGGA_API_KEY }}
+          IMAGGA_API_SECRET: ${{ secrets.IMAGGA_API_SECRET }}
         run: |
           cd Image-Classification
-          ./gradlew build -x test
-
-      - name: Start Spring application
-        run: |
-          java -jar Image-Classification/build/libs/Image-Classification-0.0.1-SNAPSHOT.jar &
-          sleep 30
-
-      - name: Run tests
-        run: |
-          cd Image-Classification
-          ./gradlew test
-
-      - name: Stop Spring application
-        run: |
-          pkill -f 'Image-Classification-0.0.1-SNAPSHOT.jar'
+          ./gradlew build
+      
+      - name: Upload build reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-reports
+          path: Image-Classification/build/reports/

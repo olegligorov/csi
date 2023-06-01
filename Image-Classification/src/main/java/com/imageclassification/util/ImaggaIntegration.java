@@ -42,7 +42,6 @@ public class ImaggaIntegration implements ImageTagger {
         String jsonResponse;
         try (BufferedReader connectionInput = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             jsonResponse = connectionInput.readLine();
-//        connectionInput.close();
         }
         return jsonResponse;
     }
@@ -58,7 +57,7 @@ public class ImaggaIntegration implements ImageTagger {
         Map<String, Double> tagMap = new HashMap<>();
 
         for (var tag : tags) {
-            tagMap.put(tag.tag.en, tag.confidence);
+            tagMap.put(tag.tag.en, Math.round(tag.confidence * 100.0) / 100.0);
         }
 
         return tagMap;

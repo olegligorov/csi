@@ -31,12 +31,15 @@ public class Tag {
         this.tag = tag;
     }
 
+    //    @Override
+//    public String toString() {
+//        return "Tag{" +
+//                "id=" + id +
+//                ", tag='" + tag + '\'' +
+//                '}';
+//    }
     @Override
     public String toString() {
-        return "Tag{" +
-                "id=" + id +
-                ", tag='" + tag + '\'' +
-                '}';
+        return tag;
     }
-
 }

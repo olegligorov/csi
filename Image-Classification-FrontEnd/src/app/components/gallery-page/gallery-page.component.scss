@@ -1,0 +1,149 @@
+.gallery-page {
+    padding: 1rem 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h2 {
+    margin: 0;
+}
+
+h5 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.gallery-page-heading {
+    display: flex;
+    justify-content: left;
+    width: 100%;
+    margin-bottom: 10px;
+    // position: relative;
+}
+
+.tag-search-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    width: 100px;
+}
+
+.submit-tags-search-input {
+    height: 30px;
+    // background: #F3F4F6FF; 
+    border-radius: 4px; 
+    padding-left: 5px;
+    border-width: 0px; 
+    border-bottom: 1px solid silver;
+    outline: none; 
+    box-sizing: border-box;
+    // width: 50%;
+}
+
+.form-container {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.form-recommended-tags {
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-bottom: 10px;
+}
+
+.form-tag-recommended {
+    background: #F3F4F6FF;
+    padding: 3px 6px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.submit-tags-search-label {
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.searchbar {
+    display: flex;
+    align-items: center;
+    // width: 70%;
+}
+
+.selected-tags {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+    width: 90%;
+}
+
+.selected-tag {
+    display: flex;
+    
+    background:#F3F4F6FF;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.delete-tag {
+    margin-left: 5px;
+    padding-left: 5px;
+    border-left: 1px solid white;
+    cursor: pointer;
+}
+
+.search-by-tags {
+    display: flex;
+    width: 100%;
+}
+
+.clear-tags {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.clear-tags:hover {
+    font-weight: 500;
+    color: black;
+}
+
+.search-settings {
+    display: flex;
+    gap: 10px;
+}
+
+.form-search-settings {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.select-settings {
+    display: flex;
+    // justify-content: center;
+    align-items: center;
+    // padding: ;
+}
+
+.select-settings select {
+    padding: 5px;
+    margin: 0 5px;
+    border-radius: 5px;
+}
+
+.show-more-btn {
+    margin-top: 20px;
+}

@@ -2,8 +2,10 @@ package com.imageclassification.services.impl;
 
 import com.imageclassification.dtos.SavedImageDTO;
 import com.imageclassification.models.Image;
+import com.imageclassification.models.ImageTaggerEntity;
 import com.imageclassification.models.Tag;
 import com.imageclassification.repositories.ImageRepository;
+import com.imageclassification.repositories.ImageTaggerRepository;
 import com.imageclassification.repositories.TagRepository;
 import com.imageclassification.services.ImageService;
 import com.imageclassification.util.ImageTagger;
@@ -13,6 +15,7 @@ import io.github.bucket4j.Refill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -42,18 +45,22 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
     private final TagRepository tagRepository;
     private final ImageTagger imageTagger;
-    private static final String UPLOADS_DIRECTORY = "." + File.separator + "uploads";
+    private final ImageTaggerRepository imageTaggerRepository;
 
     private final Bucket bucket;
+
+    private static final String UPLOADS_DIRECTORY = "." + File.separator + "uploads";
+
     private static final int REQUESTS_PER_MINUTE = 5;
     private static final int REQUESTS_REFILL_TIMER = 1;
 
 
     @Autowired
-    public ImageServiceImpl(ImageRepository imageRepository, TagRepository tagRepository, ImageTagger imageTagger) {
+    public ImageServiceImpl(ImageRepository imageRepository, TagRepository tagRepository, ImageTagger imageTagger, ImageTaggerRepository imageTaggerRepository) {
         this.imageRepository = imageRepository;
         this.tagRepository = tagRepository;
         this.imageTagger = imageTagger;
+        this.imageTaggerRepository = imageTaggerRepository;
 
         /**
          * Create Throttling bucket that allows only REQUESTS_PER_MINUTE requests every minute (REQUESTS_REFILL_TIMER)
@@ -106,13 +113,17 @@ public class ImageServiceImpl implements ImageService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while downloading image");
         }
 
-//        Optional<Image> image = imageRepository.findByUrl(imageUrl);
         Optional<Image> image = imageRepository.findByChecksum(imageChecksum);
         if (image.isPresent()) {
             createdImage = image.get();
             imageIsPresent = true;
             if (!noCache) {
                 return createdImage;
+            }
+        } else if (!noCache) {
+            image = imageRepository.findByUrl(imageUrl);
+            if (image.isPresent()) {
+                return image.get();
             }
         }
 
@@ -130,6 +141,7 @@ public class ImageServiceImpl implements ImageService {
             throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Maximum of 5 requests per minutes is succeeded, please try again in 1 minute");
         }
         String imageTaggerServiceName = imageTagger.getServiceName();
+        ImageTaggerEntity imageTaggerServiceEntity = incrementTaggerServiceRequests(imageTaggerServiceName);
 
         Map<String, Double> tags = new HashMap<>();
         try {
@@ -140,8 +152,7 @@ public class ImageServiceImpl implements ImageService {
 
         Map<Tag, Double> tagMap = new HashMap<>();
         if (imageIsPresent == false) {
-            createdImage = imageRepository.save(new Image(imageUrl, imageChecksum, imagePath, imageTaggerServiceName, tagMap, imageWidth, imageHeight));
-//            createdImage = imageRepository.save(new Image(imageUrl, imageTaggerServiceName, tagMap, imageWidth, imageHeight));
+            createdImage = imageRepository.save(new Image(imageUrl, imageChecksum, imagePath, imageTaggerServiceEntity, tagMap, imageWidth, imageHeight));
         }
 
         for (String tag : tags.keySet()) {
@@ -156,6 +167,9 @@ public class ImageServiceImpl implements ImageService {
         }
 
         createdImage.setAnalysedAt(LocalDateTime.now());
+        createdImage.setAnalysedByService(imageTaggerServiceEntity);
+        imageTaggerServiceEntity.setLastUsed(LocalDateTime.now());
+        imageTaggerRepository.save(imageTaggerServiceEntity);
         return imageRepository.save(createdImage);
     }
 
@@ -169,6 +183,12 @@ public class ImageServiceImpl implements ImageService {
     public List<Image> getAllImages() {
         return imageRepository.findAll();
     }
+
+    @Override
+    public List<Image> getAllImagesSorted(Sort sort) {
+        return imageRepository.findAll(sort);
+    }
+
 
     @Override
     public Page<Image> getAllImagesPaged(Pageable pageRequest) {
@@ -223,5 +243,21 @@ public class ImageServiceImpl implements ImageService {
 
     private String calculateChecksum(byte[] data) {
         return DigestUtils.md5DigestAsHex(data);
+    }
+
+    private ImageTaggerEntity incrementTaggerServiceRequests(String imageTaggerServiceName) {
+        Optional<ImageTaggerEntity> imageClassifierEntity = imageTaggerRepository.findByImageTaggerName(imageTaggerServiceName);
+        ImageTaggerEntity imageClassifier = null;
+
+        if (imageClassifierEntity.isPresent()) {
+            imageClassifier = imageClassifierEntity.get();
+        } else {
+            int imageTaggerLimit = imageTagger.getServiceLimit();
+            imageClassifier = imageTaggerRepository.save(new ImageTaggerEntity(imageTaggerServiceName, 0, imageTaggerLimit));
+        }
+
+        int currentRequests = imageClassifier.getCurrentRequests();
+        imageClassifier.setCurrentRequests(currentRequests + 1);
+        return imageTaggerRepository.save(imageClassifier);
     }
 }
