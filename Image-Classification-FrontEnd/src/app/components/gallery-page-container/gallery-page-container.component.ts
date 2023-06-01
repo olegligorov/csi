@@ -8,9 +8,4 @@ import { Image } from 'src/app/Image';
 })
 export class GalleryPageContainerComponent {
   @Input() images!: Image[];
-
-  getImageUrl(imageBytes: any): string {
-    const base64 = btoa(String.fromCharCode.apply(null, imageBytes));
-    return `data:image/png;base64,${base64}`;
-  }
 }

@@ -82,7 +82,7 @@ class ImageServiceImplTest {
     void testGetImageTagsWithCachedImageReturnsCachedImage() {
         String imageUrl = "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg";
         byte[] imageContent = null;
-        Image cachedImage = new Image(imageUrl, "checksum", null, imageTaggerServiceEntity, new HashMap<>(), 800, 600);
+        Image cachedImage = new Image(imageUrl, "checksum", "imagePath", imageTaggerServiceEntity, new HashMap<>(), 800, 600);
         when(imageRepository.findByChecksum(anyString())).thenReturn(Optional.of(cachedImage));
         when(imageTaggerRepository.findByImageTaggerName(anyString())).thenReturn(Optional.of(imageTaggerServiceEntity));
 
@@ -95,7 +95,7 @@ class ImageServiceImplTest {
     void getImageTagsWithoutCacheReturnsNewlyCreatedImage() throws IOException {
         String imageUrl = "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg";
 
-        Image savedImage = new Image(imageUrl, "checksum", null, imageTaggerServiceEntity, new HashMap<>(), 1280, 850);
+        Image savedImage = new Image(imageUrl, "checksum", "imagePath", imageTaggerServiceEntity, new HashMap<>(), 1280, 850);
 
         when(imageRepository.findByChecksum(anyString())).thenReturn(Optional.empty());
         when(imageTagger.getServiceName()).thenReturn("Imagga");
@@ -115,7 +115,7 @@ class ImageServiceImplTest {
     @Test
     void testGetImageByIdOfAnExistingImage() {
         Long imageId = 1L;
-        Image expectedImage = new Image("https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg", "checksum", null, imageTaggerServiceEntity, new HashMap<>(), 1280, 850);
+        Image expectedImage = new Image("https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg", "checksum", "imagePath", imageTaggerServiceEntity, new HashMap<>(), 1280, 850);
         when(imageRepository.findById(imageId)).thenReturn(Optional.of(expectedImage));
         when(imageTaggerRepository.findByImageTaggerName(anyString())).thenReturn(Optional.of(imageTaggerServiceEntity));
 

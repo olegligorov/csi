@@ -103,13 +103,11 @@ public class ImageServiceImpl implements ImageService {
         Image createdImage = null;
 
         String imageChecksum;
-        byte[] imageContent;
+        String imagePath;
         try {
             SavedImageDTO savedImageDTO = saveImageAndCalculateChecksum(imageUrl);
             imageChecksum = savedImageDTO.getChecksum();
-            imageContent = savedImageDTO.getImageContent();
-            System.out.println("IMAGE CONTENT!!!");
-            System.out.println(imageContent);
+            imagePath = savedImageDTO.getSavedPath();
         } catch (IOException e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while downloading image");
@@ -154,9 +152,7 @@ public class ImageServiceImpl implements ImageService {
 
         Map<Tag, Double> tagMap = new HashMap<>();
         if (imageIsPresent == false) {
-            System.out.println("Here!");
-            System.out.println("Image content!!!");
-            createdImage = imageRepository.save(new Image(imageUrl, imageChecksum, imageContent, imageTaggerServiceEntity, tagMap, imageWidth, imageHeight));
+            createdImage = imageRepository.save(new Image(imageUrl, imageChecksum, imagePath, imageTaggerServiceEntity, tagMap, imageWidth, imageHeight));
         }
 
         for (String tag : tags.keySet()) {
@@ -222,7 +218,7 @@ public class ImageServiceImpl implements ImageService {
         byte[] image = downloadImage(imageUrl, url, clearedName);
         String checksum = calculateChecksum(image);
 
-        return new SavedImageDTO(image, checksum, UPLOADS_DIRECTORY + File.separator + clearedName);
+        return new SavedImageDTO(checksum, UPLOADS_DIRECTORY + File.separator + clearedName);
     }
 
     private byte[] downloadImage(String imageUrl, URL url, String originalFileName) throws IOException {

@@ -40,8 +40,7 @@ public class Image {
     @Column(name = "checksum")
     private String checksum;
 
-    @Lob
-    private byte[] imageContent;
+    private String imagePath;
 
     private LocalDateTime analysedAt;
     @ManyToOne
@@ -68,10 +67,10 @@ public class Image {
         analysedAt = LocalDateTime.now();
     }
 
-    public Image(String url, String checksum, byte[] imageContent, ImageTaggerEntity analysedByService, Map<Tag, Double> tags, int width, int height) {
+    public Image(String url, String checksum, String imagePath, ImageTaggerEntity analysedByService, Map<Tag, Double> tags, int width, int height) {
         this.url = url;
         this.checksum = checksum;
-        this.imageContent = imageContent;
+        this.imagePath = imagePath;
         this.analysedByService = analysedByService;
         this.tags = tags;
         this.width = width;
