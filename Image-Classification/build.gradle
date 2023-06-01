@@ -3,6 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.10'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 //	id 'checkstyle'
+
 }
 //idea {
 //	module {
@@ -45,7 +46,6 @@ dependencies {
 
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 }
-
 
 //checkstyle {
 //	toolVersion = '8.12'
