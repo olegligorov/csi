@@ -39,26 +39,25 @@ public class TagControllerFunctionalTest {
                 .statusCode(200);
     }
 
-//    @Test
-//    public void testPushImageAndGetAllTagsShouldBeGreaterThanZero() throws JSONException {
-//        JSONObject json = new JSONObject();
-//        json.put("url", "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg");
-//        given()
-//                .spec(reqSpec)
-//                .queryParam("noCache", true)
-//                .body(json.toString())
-//                .when()
-//                .post("/images")
-//                .then()
-//                .statusCode(201);
-//
-//        given()
-//                .spec(reqSpec)
-//                .when()
-//                .get("/tags")
-//                .then()
-//                .statusCode(200)
-//                .body("size()", greaterThan(0));
-//    }
+    @Test
+    public void testPushImageAndGetAllTagsShouldBeGreaterThanZero() throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("url", "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg");
+        given()
+                .spec(reqSpec)
+                .body(json.toString())
+                .when()
+                .post("/images")
+                .then()
+                .statusCode(201);
+
+        given()
+                .spec(reqSpec)
+                .when()
+                .get("/tags")
+                .then()
+                .statusCode(200)
+                .body("size()", greaterThan(0));
+    }
 
 }

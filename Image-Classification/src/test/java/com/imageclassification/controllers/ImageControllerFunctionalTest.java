@@ -171,7 +171,6 @@ class ImageControllerFunctionalTest {
         json.put("url", "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg");
         given()
                 .spec(reqSpec)
-                .queryParam("noCache", true)
                 .body(json.toString())
                 .when()
                 .post("/images")
@@ -245,7 +244,6 @@ class ImageControllerFunctionalTest {
         json.put("url", "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg");
         given()
                 .spec(reqSpec)
-                .queryParam("noCache", true)
                 .body(json.toString())
                 .when()
                 .post("/images")
