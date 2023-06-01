@@ -3,10 +3,11 @@ package com.imageclassification.dtos;
 public class SavedImageDTO {
     private String checksum;
     private String savedPath;
-
-    public SavedImageDTO(String checksum, String savedPath) {
+    private byte[] imageContent;
+    public SavedImageDTO(byte[] image, String checksum, String savedPath) {
         this.checksum = checksum;
         this.savedPath = savedPath;
+        this.imageContent = image;
     }
 
     public String getChecksum() {
@@ -23,5 +24,13 @@ public class SavedImageDTO {
 
     public void setSavedPath(String savedPath) {
         this.savedPath = savedPath;
+    }
+
+    public byte[] getImageContent() {
+        return imageContent;
+    }
+
+    public void setImageContent(byte[] imageContent) {
+        this.imageContent = imageContent;
     }
 }

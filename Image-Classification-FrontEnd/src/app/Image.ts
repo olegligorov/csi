@@ -2,7 +2,8 @@ export interface Image {
     id: number;
     url: string;
     checksum: string;
-    imagePath: string;
+    imageContent: any;
+    // imagePath: string;
     analysedAt: Date;
     analysedByService: any;
     tags: any;
