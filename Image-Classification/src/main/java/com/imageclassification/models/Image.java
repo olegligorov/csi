@@ -45,7 +45,6 @@ public class Image {
     private LocalDateTime analysedAt;
     @ManyToOne
     @JoinColumn(name = "image_tagger_id")
-//    @JsonIgnore
     private ImageTaggerEntity analysedByService;
 
     @ElementCollection

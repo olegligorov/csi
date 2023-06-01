@@ -8,7 +8,7 @@ on:
 jobs:
   build-with-tests:
     runs-on: ubuntu-latest
-    environment: dev
+#     environment: dev
     
     steps:
       - name: Checkout code
@@ -26,9 +26,12 @@ jobs:
           ./gradlew init
         
       - name: Execute Gradle build
+        env:
+          IMAGGA_API_KEY: ${{ secrets.IMAGGA_API_KEY }}
+          IMAGGA_API_SECRET: ${{ secrets.IMAGGA_API_SECRET }}
         run: |
           cd Image-Classification
-          ./gradlew build -x test
+          ./gradlew build
       
       - name: Upload build reports
         uses: actions/upload-artifact@v3

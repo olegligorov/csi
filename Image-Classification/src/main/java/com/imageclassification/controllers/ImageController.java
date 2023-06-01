@@ -51,49 +51,6 @@ public class ImageController {
         return ResponseEntity.ok(image);
     }
 
-//    @GetMapping("/test")
-//    public ResponseEntity<?> testing() {
-//        return ResponseEntity.ok("works");
-//    }
-
-//    @GetMapping
-//    public List<Image> getAllImages() {
-//        return imageService.getAllImages();
-//    }
-
-//    @GetMapping
-//    public ResponseEntity<List<?>> getAllImagesPaged(
-//            @RequestParam(name = "tags", required = false) Collection<String> tags,
-//            @RequestParam(name = "order", defaultValue = "desc") String order,
-//            @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
-//            @RequestParam(name = "pageSize", defaultValue = "20") int pageSize) {
-//
-//        if (tags != null) {
-//            return ResponseEntity.ok(imageService.getAllImagesWithTags(tags));
-//        }
-//
-//        validateOrder(order);
-//
-//        if (pageNumber == 0 && pageSize == 0) {
-//            Sort.Direction direction = Sort.Direction.DESC;
-//            if (order.equalsIgnoreCase("asc")) {
-//                direction = Sort.Direction.ASC;
-//            }
-//            return ResponseEntity.ok(imageService.getAllImages());
-//        }
-//
-//        validateParameters(pageNumber, pageSize);
-//
-//        Sort.Direction direction = Sort.Direction.DESC;
-//        if (order.equalsIgnoreCase("asc")) {
-//            direction = Sort.Direction.ASC;
-//        }
-//
-//        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, direction, "analysedAt");
-//        Page<Image> imagePage = imageService.getAllImagesPaged(pageRequest);
-//        return ResponseEntity.ok(imagePage.getContent());
-//    }
-
     @GetMapping
     public ResponseEntity<List<?>> getAllImagesPaged(
             @RequestParam(name = "tags", required = false) Collection<String> tags,
