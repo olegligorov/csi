@@ -15,6 +15,7 @@ import io.github.bucket4j.Refill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -180,8 +181,15 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public List<Image> getAllImages() {
+//        return imageRepository.findAllbyOrder
         return imageRepository.findAll();
     }
+
+    @Override
+    public List<Image> getAllImagesSorted(Sort sort) {
+        return imageRepository.findAll(sort);
+    }
+
 
     @Override
     public Page<Image> getAllImagesPaged(Pageable pageRequest) {

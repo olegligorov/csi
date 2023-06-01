@@ -1,0 +1,18 @@
+<div class="tagging-services-container">
+    <h2>Tagging Services</h2>
+    <clr-datagrid>
+        <clr-dg-column>Service</clr-dg-column>
+        <clr-dg-column>Requests</clr-dg-column>
+        <clr-dg-column>Usage</clr-dg-column>
+        <clr-dg-column>Last Used</clr-dg-column>
+        
+        <clr-dg-row *ngFor="let service of taggingServices">
+            <clr-dg-cell>{{service.imageTaggerName}}</clr-dg-cell>
+            <clr-dg-cell>{{service.currentRequests}}</clr-dg-cell>
+            <clr-dg-cell>{{ ceilNumber(service.currentRequests / service.taggerLimit * 100) }}% ({{ service.taggerLimit }} allowed) </clr-dg-cell>
+            <clr-dg-cell>{{service.lastUsed | date:'HH:mm:ss \'on\' MMM d, yyyy'}}</clr-dg-cell>
+        </clr-dg-row>
+        
+        <clr-dg-footer>{{taggingServices.length}} services</clr-dg-footer>
+    </clr-datagrid>
+</div>

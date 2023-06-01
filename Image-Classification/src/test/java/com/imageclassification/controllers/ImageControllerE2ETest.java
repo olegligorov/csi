@@ -18,9 +18,8 @@ import org.springframework.test.context.TestPropertySource;
 import java.util.List;
 import java.util.Objects;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
-//@TestPropertySource(locations = "classpath:application.yaml")
 public class ImageControllerE2ETest {
 
     private static RequestSpecBuilder builder;

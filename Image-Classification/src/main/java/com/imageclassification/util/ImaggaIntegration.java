@@ -25,6 +25,8 @@ public class ImaggaIntegration implements ImageTagger {
 
     public String fetchTags(String imageUrl) throws IOException {
         String credentialsToEncode = System.getenv("IMAGGA_API_KEY") + ":" + System.getenv("IMAGGA_API_SECRET");
+//        TODO
+//        String credentialsToEncode = "acc_4c83b6a65e7d031" + ":" +"ba1b8d4251924b5c91fe8d3322f8b562";
 
         String basicAuth = Base64.getEncoder().encodeToString(credentialsToEncode.getBytes(StandardCharsets.UTF_8));
 

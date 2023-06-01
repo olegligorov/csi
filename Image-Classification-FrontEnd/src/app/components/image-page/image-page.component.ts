@@ -15,8 +15,6 @@ export class ImagePageComponent implements OnInit {
 
   ngOnInit(): void {
     const imageId = this.route.snapshot.paramMap.get('imageId');
-    console.log("Imade ID: " + imageId);
-
     this.imageService.getImage(imageId).subscribe((image) => {
       this.image = image;
       console.log(image)

@@ -29,15 +29,22 @@ export class ImageService {
     return this.http.get<Image>(endpoint);
   }
 
-  getAllImages(tags: string | null): Observable<Image[]> {
+  getAllImages(tags: string | null, pageSize: number, order: string | null): Observable<Image[]> {
     if (tags) {
       return this.getAllImagesWithTags(tags);
     }
-    return this.http.get<Image[]>(this.apiUrl);
+    // return this.http.get<Image[]>(this.apiUrl);
+    const endpoint = `${this.apiUrl}?order=${order}&pageSize=${pageSize}`;
+    return this.http.get<Image[]>(endpoint);
   }
 
   getAllImagesWithTags(tags: string | null): Observable<Image[]> {
     const endpoint = `${this.apiUrl}?tags=${tags}`;
+    return this.http.get<Image[]>(endpoint);
+  }
+
+  getImagesOnPage(pageNumber: number, pageSize: number, order: string | null) {
+    const endpoint = `${this.apiUrl}?order=${order}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
     return this.http.get<Image[]>(endpoint);
   }
 }

@@ -3,6 +3,7 @@ package com.imageclassification.services;
 import com.imageclassification.models.Image;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,6 +18,8 @@ public interface ImageService {
     Image getImageById(Long id);
 
     List<Image> getAllImages();
+
+    List<Image> getAllImagesSorted(Sort sort);
 
     Page<Image> getAllImagesPaged(Pageable pageRequest);
 

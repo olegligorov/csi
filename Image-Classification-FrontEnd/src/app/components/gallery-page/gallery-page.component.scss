@@ -48,7 +48,7 @@ button {
     border-bottom: 1px solid silver;
     outline: none; 
     box-sizing: border-box;
-    width: 80%;
+    // width: 50%;
 }
 
 .form-container {
@@ -79,7 +79,7 @@ button {
 .searchbar {
     display: flex;
     align-items: center;
-    width: 100%;
+    // width: 70%;
 }
 
 .selected-tags {
@@ -118,4 +118,32 @@ button {
 .clear-tags:hover {
     font-weight: 500;
     color: black;
+}
+
+.search-settings {
+    display: flex;
+    gap: 10px;
+}
+
+.form-search-settings {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.select-settings {
+    display: flex;
+    // justify-content: center;
+    align-items: center;
+    // padding: ;
+}
+
+.select-settings select {
+    padding: 5px;
+    margin: 0 5px;
+    border-radius: 5px;
+}
+
+.show-more-btn {
+    margin-top: 20px;
 }

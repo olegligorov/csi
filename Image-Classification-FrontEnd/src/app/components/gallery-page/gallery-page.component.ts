@@ -22,18 +22,34 @@ export class GalleryPageComponent {
   images !: Image[];
   tags: string | null | undefined;
   tagsSearch: string | null = "";
-  recommendedTags !: Tag[];
-  filterByTags : Set<string> = new Set<string>();
+  recommendedTags!: Tag[];
+  filterByTags: Set<string> = new Set<string>();
+
+  pageNumber: number = 0 ;
+  pageSize: number = 20;
+  order: string | null = 'desc';
+  lastFetchSize: number = 5;
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
       this.tags = params.get('tags');
+      
+      const pageSizeStr = params.get('pageSize');
+      this.pageSize = !pageSizeStr ? 20 : Number(pageSizeStr);
+
+      this.order = params.get('order');
+      this.pageNumber = 0;
+
+      if (!this.order) {
+        this.order = "desc";
+      }
 
       this.filterByTags = new Set(this.tags?.split(','));
       // this.tagsSearch = !this.tags ? '' : this.tags;
 
-      this.imageService.getAllImages(this.tags).subscribe((images) => {
+      this.imageService.getAllImages(this.tags, this.pageSize, this.order).subscribe((images) => {
         this.images = images;
+        this.lastFetchSize = images.length;
       });
     });
 
@@ -45,16 +61,17 @@ export class GalleryPageComponent {
     const searchForTags = [...this.filterByTags].join(',');
 
     if (searchForTags) {
-      this.router.navigateByUrl(`images?tags=${searchForTags}`)
+      this.router.navigateByUrl(`images?tags=${searchForTags}`);
     } else {
-      this.router.navigateByUrl('images')
+      this.router.navigateByUrl('images');
+      const endpoint = `images?order=${this.order}&pageSize=${this.pageSize}`;
+      this.router.navigateByUrl(endpoint);
     }
   }
 
   getRecommendedTags(prefix: string | null | undefined): void {
     this.tagService.getAllTags(prefix).subscribe(tags => {
       this.recommendedTags = tags;
-      // console.log(this.recommendedTags);
     })
   }
 
@@ -79,33 +96,33 @@ export class GalleryPageComponent {
     this.tagsSearch = '';
     this.getRecommendedTags(this.tagsSearch);
 
-    // console.log("FILTER BY TAGS!");
-    // console.log(this.filterByTags);
-
     this.searchImages();
   }
 
   deleteTag(tag: string): void {
     this.filterByTags.delete(tag);
-    
-    console.log("FILTER BY TAGS!");
-    console.log(this.filterByTags);
-
     this.searchImages();
   }
 
   clearTags(): void {
     this.filterByTags.clear();
-
     this.searchImages();
   }
 
   addCustomTag() {
-    console.log(this.tagsSearch);
-
     this.addTagToInput(this.tagsSearch);
-
     this.tagsSearch = '';
   }
 
+  searchSettingsChange() {
+    this.searchImages();
+  }
+
+  fetchMoreImages() {
+    this.pageNumber += 1;
+    this.imageService.getImagesOnPage(this.pageNumber, this.pageSize, this.order).subscribe((images) => {
+      this.images = this.images.concat(images);
+      this.lastFetchSize = images.length;
+    });
+  }
 }

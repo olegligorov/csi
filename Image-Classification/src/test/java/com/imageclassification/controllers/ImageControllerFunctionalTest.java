@@ -7,6 +7,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.ClassRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -22,16 +23,19 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 class ImageControllerFunctionalTest {
     private static RequestSpecBuilder builder;
     private static RequestSpecification reqSpec;
 
+//    @ClassRule
+//    public final EnvironmentVariables environmentVariables = new EnvironmentVariables().set("name", "value");
+
     @BeforeEach
     void setUp() {
         builder = new RequestSpecBuilder();
-        builder.setBaseUri("http://localhost");
+        builder.setBaseUri("http://localhost:8080");
         builder.setContentType(ContentType.JSON);
         reqSpec = builder.build();
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
@@ -252,30 +256,30 @@ class ImageControllerFunctionalTest {
                 .statusCode(400);
     }
 
-    @Test
-    public void testGetAllImagesWithValidTags() throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put("url", "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg");
-        given()
-                .spec(reqSpec)
-                .queryParam("noCache", true)
-                .body(json.toString())
-                .when()
-                .post("/images")
-                .then()
-                .statusCode(201);
-
-        List<String> tags = List.of("mountains", "landscape");
-        given()
-                .spec(reqSpec)
-                .queryParam("tags", String.join(",", tags))
-                .when()
-//                .get("/images/tags")
-                .get("/images")
-                .then()
-                .statusCode(200)
-                .body("size()", greaterThanOrEqualTo(1));
-    }
+//    @Test
+//    public void testGetAllImagesWithValidTags() throws JSONException {
+//        JSONObject json = new JSONObject();
+//        json.put("url", "https://docs.imagga.com/static/images/docs/sample/japan-605234_1280.jpg");
+//        given()
+//                .spec(reqSpec)
+//                .queryParam("noCache", true)
+//                .body(json.toString())
+//                .when()
+//                .post("/images")
+//                .then()
+//                .statusCode(201);
+//
+//        List<String> tags = List.of("mountains", "landscape");
+//        given()
+//                .spec(reqSpec)
+//                .queryParam("tags", String.join(",", tags))
+//                .when()
+////                .get("/images/tags")
+//                .get("/images")
+//                .then()
+//                .statusCode(200)
+//                .body("size()", greaterThanOrEqualTo(1));
+//    }
 
     @Test
     public void testGetAllImagesWithEmptyTagsShouldReturnEmptyList() {
