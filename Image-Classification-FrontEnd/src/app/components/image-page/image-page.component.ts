@@ -17,7 +17,6 @@ export class ImagePageComponent implements OnInit {
     const imageId = this.route.snapshot.paramMap.get('imageId');
     this.imageService.getImage(imageId).subscribe((image) => {
       this.image = image;
-      console.log(image)
     });
   }
 
