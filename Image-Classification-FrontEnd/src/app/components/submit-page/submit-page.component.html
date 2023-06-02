@@ -4,7 +4,7 @@
         <div>
             <div>
                 <label for="url"></label>
-                <input class="submit-page-url-input" type="text" name="url" [(ngModel)]="url" placeholder="Enter image url to analyze it">
+                <input id="searchbar" class="submit-page-url-input" type="text" name="url" [(ngModel)]="url" placeholder="Enter image url to analyze it">
             </div>
 
             <div *ngIf="hasError" class="alert alert-danger">
@@ -20,9 +20,9 @@
             
             <div class="submit-page-checkbox-container">
                 <label for="noCache">Analyse again if the image already exists </label>
-                <input type="checkbox" name="noCache" [(ngModel)] = "noCache" value="true">
+                <input id="cache_checkbox" type="checkbox" name="noCache" [(ngModel)] = "noCache" value="true">
             </div>
         </div>
-        <button class="btn btn-primary" type="submit">Analyse Image</button>
+        <button id="submit-button" class="btn btn-primary" type="submit">Analyse Image</button>
     </form>
 </div>
