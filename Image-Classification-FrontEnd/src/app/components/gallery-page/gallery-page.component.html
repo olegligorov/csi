@@ -11,9 +11,9 @@
                 <div class="form-search-settings">
                     <div class="searchbar">
                         <label for="tagsSearch" class="submit-tags-search-label">Search or filter by tag:</label>
-                        <input class="submit-tags-search-input" type="text" name="tagsSearch" [(ngModel)]="tagsSearch" 
+                        <input class="submit-tags-search-input" type="text" name="tagsSearch" id="submit-tags-search-input" [(ngModel)]="tagsSearch" 
                         (ngModelChange)="onTagsSearchChange()" placeholder="Enter tags">
-                        <button class="btn btn-primary" type="submit">Add tag</button>
+                        <button class="btn btn-primary" id="add-tag-btn" type="submit">Add tag</button>
                     </div>
 
                     <div *ngIf="!tags" class="search-settings">

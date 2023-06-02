@@ -13,8 +13,6 @@ import java.util.regex.Pattern;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FunctionalUITests {
     private static Browser browser;
-
-    private static Page currentPage;
     BrowserContext context;
 
     @BeforeAll
@@ -88,6 +86,9 @@ public class FunctionalUITests {
 
         pattern = Pattern.compile("http://localhost:4200/images\\?tags=.+");
         PlaywrightAssertions.assertThat(currPage).hasURL(pattern);
+
+        boolean image = currPage.querySelector(".gallery-card:first-of-type img") != null;
+        Assertions.assertTrue(image);
     }
 
     @Test
@@ -104,13 +105,26 @@ public class FunctionalUITests {
         Pattern pattern = Pattern.compile("http://localhost:4200/images\\?tags=.+");
         PlaywrightAssertions.assertThat(currPage).hasURL(pattern);
 
+        boolean selectedTagIsPresent = currPage.querySelector(".selected-tag:nth-of-type(1)") != null;
+        Assertions.assertTrue(selectedTagIsPresent);
+
+
+        boolean image = currPage.querySelector(".gallery-card:first-of-type img") != null;
+        Assertions.assertTrue(image);
+
         secondTag.click();
         pattern = Pattern.compile("http://localhost:4200/images\\?tags=.+,.+");
         PlaywrightAssertions.assertThat(currPage).hasURL(pattern);
 
+        selectedTagIsPresent = currPage.querySelector(".selected-tag:nth-of-type(2)") != null;
+        Assertions.assertTrue(selectedTagIsPresent);
+
         thirdTag.click();
         pattern = Pattern.compile("http://localhost:4200/images\\?tags=.+,.+,.+");
         PlaywrightAssertions.assertThat(currPage).hasURL(pattern);
+
+        selectedTagIsPresent = currPage.querySelector(".selected-tag:nth-of-type(3)") != null;
+        Assertions.assertTrue(selectedTagIsPresent);
 
         Locator searchingByText = currPage.locator("#showing-results-text");
         String expectedText = "Showing results for tags: " + firstTag.textContent() + "," + secondTag.textContent() + "," + thirdTag.textContent();
@@ -120,12 +134,14 @@ public class FunctionalUITests {
         clearTags.click();
         pattern = Pattern.compile("http://localhost:4200/images[\\?order=.*]");
         PlaywrightAssertions.assertThat(currPage).hasURL(pattern);
+
+        selectedTagIsPresent = currPage.querySelector(".selected-tag:nth-of-type(1)") == null;
+        Assertions.assertTrue(selectedTagIsPresent);
     }
 
     @Test
     @Order(5)
     public void testGallerySettingsSortAndPageSize() {
-
         Page currPage = context.newPage();
         currPage.navigate("http://localhost:4200/images");
         Locator sortBy = currPage.locator("#order");
@@ -142,8 +158,42 @@ public class FunctionalUITests {
         pageSize.click();
         pageSize.selectOption("20");
         PlaywrightAssertions.assertThat(currPage).hasURL("http://localhost:4200/images?order=asc&pageSize=20");
+
+//        assert that there is at least one image shown that matches the tags
+        boolean image = currPage.querySelector(".gallery-card:first-of-type img") != null;
+        Assertions.assertTrue(image);
     }
 
+    @Test
+    @Order(6)
+    public void testCreatingCustomTags() {
+        Page currPage = context.newPage();
+        currPage.navigate("http://localhost:4200/images");
+        Locator inputTags = currPage.locator("#submit-tags-search-input");
+        String tagInput = "customtag";
+        inputTags.type(tagInput);
+        Locator addTagBtn = currPage.locator("#add-tag-btn");
+        addTagBtn.click();
 
+        boolean selectedTagIsPresent = currPage.querySelector(".selected-tag:first-of-type") != null;
+        Assertions.assertTrue(selectedTagIsPresent);
+
+        tagInput = "customtag2";
+        inputTags.type(tagInput);
+        addTagBtn.click();
+
+        selectedTagIsPresent = currPage.querySelector(".selected-tag:nth-of-type(2)") != null;
+        Assertions.assertTrue(selectedTagIsPresent);
+    }
+
+    @Test
+    @Order(7)
+    public void testViewingTaggingServices() {
+        Page currPage = context.newPage();
+        currPage.navigate("http://localhost:4200/tagging_services");
+
+        boolean hasAtLeastOneTaggingService = currPage.querySelector("clr-dg-row:first-of-type") != null;
+        Assertions.assertTrue(hasAtLeastOneTaggingService);
+    }
 
 }
