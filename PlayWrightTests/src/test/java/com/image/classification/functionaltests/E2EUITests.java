@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Paths;
 import java.util.regex.Pattern;
 
 public class E2EUITests {
@@ -30,8 +31,8 @@ public class E2EUITests {
 
     @BeforeEach
     void createContext() {
-//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        context = browser.newContext();
+//        context = browser.newContext();
+        context = browser.newContext(new Browser.NewContextOptions().setRecordVideoDir(Paths.get("test-videos/")));
     }
 
     @AfterEach

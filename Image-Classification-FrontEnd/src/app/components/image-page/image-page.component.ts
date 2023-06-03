@@ -21,9 +21,7 @@ export class ImagePageComponent implements OnInit {
       this.image = image;
     }, error => {
       // console.log(error.status);
-      if (error.status == 404) {
         this.router.navigateByUrl(`not_found`)
-      }
     });
   }
 

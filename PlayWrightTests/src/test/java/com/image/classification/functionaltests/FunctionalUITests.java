@@ -26,8 +26,8 @@ public class FunctionalUITests {
 
     @BeforeEach
     void createContext() {
-//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        context = browser.newContext();
+//        context = browser.newContext();
+        context = browser.newContext(new Browser.NewContextOptions().setRecordVideoDir(Paths.get("test-videos/")));
     }
 
     @AfterEach
@@ -71,6 +71,7 @@ public class FunctionalUITests {
 
         Locator image = currPage.locator("#main-image");
         PlaywrightAssertions.assertThat(image).isVisible();
+        currPage.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("test-screenshots/imagePage.png")));
     }
 
     @Test
@@ -89,6 +90,7 @@ public class FunctionalUITests {
 
         Locator errorText = currPage.locator("#error-message");
         PlaywrightAssertions.assertThat(errorText).isVisible();
+        currPage.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("test-screenshots/invalidImageSubmission.png")));
     }
 
     @Test
@@ -146,10 +148,11 @@ public class FunctionalUITests {
         selectedTagIsPresent = currPage.locator(".selected-tag:nth-of-type(3)");
         PlaywrightAssertions.assertThat(selectedTagIsPresent).isVisible();
 
-
         Locator searchingByText = currPage.locator("#showing-results-text");
         String expectedText = "Showing results for tags: " + firstTag.textContent() + "," + secondTag.textContent() + "," + thirdTag.textContent();
         PlaywrightAssertions.assertThat(searchingByText).containsText(expectedText);
+
+        currPage.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("test-screenshots/searchingByMultipleTags.png")));
 
         Locator clearTags = currPage.locator("#clear-tags");
         clearTags.click();
@@ -220,12 +223,16 @@ public class FunctionalUITests {
         PlaywrightAssertions.assertThat(hasAtLeastOneTaggingService).isVisible();
     }
 
-//    @Test
-//    public void testOpeningInvalidImageId() {
-//        Page currPage = context.newPage();
-//        currPage.navigate("http://localhost:4200/-5");
-//
-//        PlaywrightAssertions.assertThat(currPage).hasURL("http://localhost:4200/error_page");
-//    }
+    @Test
+    public void testOpeningInvalidImageId() {
+        Page currPage = context.newPage();
+        currPage.navigate("http://localhost:4200/images/-5");
+
+        PlaywrightAssertions.assertThat(currPage).hasURL("http://localhost:4200/not_found");
+
+        Locator noResultsFound = currPage.getByText("No results found");
+        PlaywrightAssertions.assertThat(noResultsFound).isVisible();
+        currPage.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("test-screenshots/ImageNotFound404 .png")));
+    }
 
 }

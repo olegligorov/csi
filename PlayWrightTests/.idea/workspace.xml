@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45f09707-592f-4f22-8014-39d511977d2b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/PlayWrightTests.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PlayWrightTests.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Image-Classification-FrontEnd/src/app/components/image-page/image-page.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Image-Classification-FrontEnd/src/app/components/image-page/image-page.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/image/classification/functionaltests/E2EUITests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/image/classification/functionaltests/E2EUITests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/image/classification/functionaltests/FunctionalUITests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/image/classification/functionaltests/FunctionalUITests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/image/classification/functionaltests/FunctionalUITests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/image/classification/functionaltests/FunctionalUITests.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +43,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
-  <component name="RunManager" selected="JUnit.FunctionalUITests.testFilteringByMultipleTagsInGalleryPage">
+  <component name="RunManager" selected="JUnit.FunctionalUITests.testOpeningInvalidImageId">
     <configuration name="FunctionalUITests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PlayWrightTests" />
       <extension name="coverage">
@@ -89,6 +91,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="FunctionalUITests.testOpeningInvalidImageId" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PlayWrightTests" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.image.classification.functionaltests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.image.classification.functionaltests" />
+      <option name="MAIN_CLASS_NAME" value="com.image.classification.functionaltests.FunctionalUITests" />
+      <option name="METHOD_NAME" value="testOpeningInvalidImageId" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="FunctionalUITests.testSubmitUrlWithCacheRedirectsToPhotoPage" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PlayWrightTests" />
       <extension name="coverage">
@@ -107,10 +125,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.FunctionalUITests.testFilteringByMultipleTagsInGalleryPage" />
-        <item itemvalue="JUnit.FunctionalUITests" />
+        <item itemvalue="JUnit.FunctionalUITests.testOpeningInvalidImageId" />
         <item itemvalue="JUnit.FunctionalUITests.testSubmitUrlWithCacheRedirectsToPhotoPage" />
         <item itemvalue="JUnit.FunctionalUITests.testNavigationBar" />
+        <item itemvalue="JUnit.FunctionalUITests.testFilteringByMultipleTagsInGalleryPage" />
+        <item itemvalue="JUnit.FunctionalUITests" />
       </list>
     </recent_temporary>
   </component>
@@ -123,11 +142,25 @@
       <option name="presentableId" value="Default" />
       <updated>1685792984524</updated>
       <workItem from="1685792988267" duration="28000" />
-      <workItem from="1685793193693" duration="1055000" />
+      <workItem from="1685793193693" duration="1290000" />
+      <workItem from="1685805654284" duration="1882000" />
+      <workItem from="1685808018987" duration="115000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
