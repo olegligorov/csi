@@ -7,7 +7,7 @@
                 <input id="searchbar" class="submit-page-url-input" type="text" name="url" [(ngModel)]="url" placeholder="Enter image url to analyze it">
             </div>
 
-            <div *ngIf="hasError" class="alert alert-danger">
+            <div *ngIf="hasError" id="error-message" class="alert alert-danger">
                 <div class="submit-page-error-message alert-items">
                     <div class="alert-item static">
                         <div class="alert-icon-wrapper">
