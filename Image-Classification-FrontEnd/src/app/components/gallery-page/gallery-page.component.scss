@@ -8,6 +8,7 @@
 
 h2 {
     margin: 0;
+    font-weight: 400;
 }
 
 h5 {
@@ -41,9 +42,7 @@ button {
 }
 
 .submit-tags-search-input {
-    height: 30px;
-    // background: #F3F4F6FF; 
-    border-radius: 4px; 
+    height: 30px; 
     padding-left: 5px;
     border-width: 0px; 
     border-bottom: 1px solid silver;
@@ -58,7 +57,11 @@ button {
 }
 
 .form-recommended-tags {
-    width: 90%;
+    width: 100%;
+    padding: 10px 0;
+    border-top: 1px solid rgba(233, 231, 231, 0.8);
+    border-bottom: 1px solid rgba(233, 231, 231, 0.8);
+
     display: flex;
     flex-wrap: wrap;
     gap: 3px;
@@ -84,11 +87,12 @@ button {
 }
 
 .selected-tags {
+    margin-top: 10px;
     display: flex;
     align-items: center;
     margin-bottom: 5px;
     flex-wrap: wrap;
-    width: 90%;
+    width: 100%;
 }
 
 .selected-tag {
@@ -146,4 +150,44 @@ button {
 
 .show-more-btn {
     margin-top: 20px;
+}
+
+.search_and_button_container {
+    display: flex;
+}
+
+@media screen and (max-width: 950px) {
+    .form-search-settings {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .form-search-settings {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .form-tag-recommended:nth-child(n + 16) {
+        display: none;
+    }
+
+    .submit-tags-search-input {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .form-tag-recommended:nth-child(n + 8) {
+        display: none;
+    }
+
+    .submit-tags-search-input {
+        width: 80%;
+    }
+
+    .searchbar {
+        flex-direction: column;
+    }
 }

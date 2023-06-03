@@ -3,7 +3,7 @@
     flex-direction: column;
     background-color: white;
     border-radius: 10px;
-    max-width: 15rem;
+    max-width: 15rem;   
 }
 
 img {
@@ -46,4 +46,34 @@ img {
 
 a {
     text-decoration: none;
+}
+
+@media screen and (max-width: 1100px) {
+    .gallery-container {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+
+    }
+}
+
+@media screen and (max-width: 950px) {
+    .gallery-container {
+        grid-template-columns: 1fr 1fr 1fr;
+
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .gallery-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    img {
+        height: 13rem;
+    }
+
+    .gallery-container {
+        grid-template-columns: 1fr;
+    }
 }
