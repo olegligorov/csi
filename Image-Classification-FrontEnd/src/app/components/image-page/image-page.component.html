@@ -1,6 +1,6 @@
 <div [class.image-page-portrait]="image.height > image.width"
     [class.image-page-landscape]="image.height <= image.width">
-    <img src="{{ image.url }}" alt="photo">
+    <img id="main-image" src="{{ image.url }}" alt="photo">
     <div class="image-page-data">
         <div class="image-page-url">
             <svg class="attach-url-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"

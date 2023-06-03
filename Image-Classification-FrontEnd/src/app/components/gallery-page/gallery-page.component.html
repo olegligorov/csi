@@ -3,17 +3,17 @@
     <div class="gallery-page-heading">
         <div class="form-container">
             <div class="form-recommended-tags">
-                <span *ngIf="recommendedTags && recommendedTags.length != 0"> Recommended tags: </span>
-                <span *ngFor="let item of recommendedTags | slice:0:30" class="form-tag-recommended" (click)="addTagToInput(item.tag)"> {{ item.tag }}</span>
+                <span *ngIf="recommendedTags && recommendedTags.length != 0">Recommended tags: </span>
+                <span *ngFor="let item of recommendedTags | slice:0:30" class="form-tag-recommended" (click)="addTagToInput(item.tag)">{{ item.tag }}</span>
             </div>
             <!-- <form (ngSubmit)="searchImages()" class="tag-search-form"> -->
             <form (ngSubmit)="addCustomTag()" class="tag-search-form">
                 <div class="form-search-settings">
                     <div class="searchbar">
                         <label for="tagsSearch" class="submit-tags-search-label">Search or filter by tag:</label>
-                        <input class="submit-tags-search-input" type="text" name="tagsSearch" [(ngModel)]="tagsSearch" 
+                        <input class="submit-tags-search-input" type="text" name="tagsSearch" id="submit-tags-search-input" [(ngModel)]="tagsSearch" 
                         (ngModelChange)="onTagsSearchChange()" placeholder="Enter tags">
-                        <button class="btn btn-primary" type="submit">Add tag</button>
+                        <button class="btn btn-primary" id="add-tag-btn" type="submit">Add tag</button>
                     </div>
 
                     <div *ngIf="!tags" class="search-settings">
@@ -47,13 +47,13 @@
                             <span>{{selected_tag}}</span>
                             <span class="delete-tag" (click)="deleteTag(selected_tag)">x</span>
                         </div>
-                        <span *ngIf="filterByTags.size != 0" (click)="clearTags()" class="clear-tags">Clear Tags</span>
+                        <span *ngIf="filterByTags.size != 0" (click)="clearTags()" class="clear-tags" id="clear-tags">Clear Tags</span>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <h5 *ngIf="tags">Showing results for tags: {{ tags }} </h5>
+    <h5 *ngIf="tags" id="showing-results-text">Showing results for tags: {{ tags }} </h5>
 
     <app-gallery-page-container [images]="images"></app-gallery-page-container>
 
