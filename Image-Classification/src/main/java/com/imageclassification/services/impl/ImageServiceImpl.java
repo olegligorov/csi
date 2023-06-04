@@ -120,13 +120,16 @@ public class ImageServiceImpl implements ImageService {
             if (!noCache) {
                 return createdImage;
             }
-        } else if (!noCache) {
+        } else {
             image = imageRepository.findByUrl(imageUrl);
             if (image.isPresent()) {
-                return image.get();
+                createdImage = image.get();
+                imageIsPresent = true;
+                if (!noCache) {
+                    return createdImage;
+                }
             }
         }
-
         List<Integer> imageDimensions = new ArrayList<>();
         try {
             imageDimensions = getImageWidthAndHeight(imageUrl);

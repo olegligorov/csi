@@ -27,6 +27,7 @@ img {
 
 .image-page-tags {
     display: flex;
+    flex-direction: row;
     row-gap: 0.2rem;
     max-width: 30rem;
     flex-wrap: wrap;
@@ -73,4 +74,107 @@ img {
 
 a {
     text-decoration: none;
+}
+
+.btn {
+    
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+.imagelink {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: rgb(192, 192, 238);
+    border-bottom: 1px solid rgb(192, 192, 238);    
+}
+
+.imagelink a {
+    color: rgb(107, 107, 188);
+}
+
+@media screen and (max-width: 800px) {
+    img {
+        max-width: 20rem;
+        max-height: 15rem;
+    }
+
+    .image-page-data {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .image-page-tags {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .image-page-portrait {
+        padding: 2rem 7rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .image-page-portrait .image-page-data {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .image-page-tag {
+        padding: 0;
+        margin: 0;
+        margin-right: 5px;
+    }
+
+    .imagelink a {
+        font-size: 12px;
+    }
+
+    h4 {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    img {
+        max-width: 15rem;
+        max-height: 15rem;
+    }
+
+    .image-page-tags .image-page-tag .tag-name {
+        padding: 2px 6px;
+        font-size: 12px;
+    }
+
+    .imagelink a {
+        font-size: 8px;
+    }
+
+    h4 {
+        font-size: 10px;
+    }
+
+    .image-page-tags {
+        justify-content: left;
+        align-items: baseline;
+    }
+
+    .image-page-tag {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .tag-confidence {
+        visibility: visible;
+    }
 }

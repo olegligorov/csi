@@ -14,12 +14,14 @@ import { ImagePageComponent } from './components/image-page/image-page.component
 import { GalleryPageComponent } from './components/gallery-page/gallery-page.component';
 import { GalleryPageContainerComponent } from './components/gallery-page-container/gallery-page-container.component';
 import { TaggingServicePageComponent } from './components/tagging-service-page/tagging-service-page.component';
+import { ErrorPageComponent } from './components/error-page/error-page.component';
 
 const appRoutes: Routes = [
   {path: '', component: SubmitPageComponent},
   {path: 'images/:imageId', component: ImagePageComponent},
   {path: 'images', component: GalleryPageComponent},
-  {path: 'tagging_services', component: TaggingServicePageComponent}
+  {path: 'tagging_services', component: TaggingServicePageComponent},
+  {path: 'not_found', component: ErrorPageComponent}
 ]
 
 @NgModule({
@@ -30,7 +32,8 @@ const appRoutes: Routes = [
     ImagePageComponent,
     GalleryPageComponent,
     GalleryPageContainerComponent,
-    TaggingServicePageComponent
+    TaggingServicePageComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,

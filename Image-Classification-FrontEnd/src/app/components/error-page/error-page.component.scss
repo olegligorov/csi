@@ -1,0 +1,21 @@
+img {
+    max-width: 22rem;
+}
+
+h2 {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.error-page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+a {
+    margin-top: 15px;
+    text-decoration: none;
+}

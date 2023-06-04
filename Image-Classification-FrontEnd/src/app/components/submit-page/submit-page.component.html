@@ -1,13 +1,19 @@
 <div class="submit-page-container">
-    <h2 class="submit-page-container-heading">Point to an image to tag</h2>
+    <div *ngIf="loading" class="loading-container">
+        <h2>Analysing image</h2>
+        <span class="loader"><span class="loader-inner"></span></span>
+    </div>
+
+    <h2 *ngIf="!loading" class="submit-page-container-heading">Point to an image to tag</h2>
+
     <form (ngSubmit)="onSubmit()" class="submit-page-form">
         <div>
             <div>
                 <label for="url"></label>
-                <input class="submit-page-url-input" type="text" name="url" [(ngModel)]="url" placeholder="Enter image url to analyze it">
+                <input class="submit-page-url-input" id="searchbar" type="text" name="url" [(ngModel)]="url" placeholder="Enter image url to analyze it">
             </div>
 
-            <div *ngIf="hasError" class="alert alert-danger">
+            <div *ngIf="hasError" id="error-message" class="alert alert-danger">
                 <div class="submit-page-error-message alert-items">
                     <div class="alert-item static">
                         <div class="alert-icon-wrapper">
@@ -20,9 +26,9 @@
             
             <div class="submit-page-checkbox-container">
                 <label for="noCache">Analyse again if the image already exists </label>
-                <input type="checkbox" name="noCache" [(ngModel)] = "noCache" value="true">
+                <input type="checkbox" id="cache_checkbox" name="noCache" [(ngModel)] = "noCache" value="true">
             </div>
         </div>
-        <button class="btn btn-primary" type="submit">Analyse Image</button>
+        <button class="btn btn-primary" id="submit-button" type="submit">Analyse Image</button>
     </form>
 </div>

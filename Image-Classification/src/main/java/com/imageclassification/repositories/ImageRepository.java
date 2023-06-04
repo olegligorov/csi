@@ -15,10 +15,17 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     Optional<Image> findByUrl(String url);
     Optional<Image> findByChecksum(String url);
 
-    @Query(value = "select * from images " +
-            "join image_tag on images.image_id = image_tag.image_id " +
-            "join tags on image_tag.tag_id = tags.tag_id where tags.tag in :tagList " +
-            "group by images.image_id " +
-            "having count(distinct tags.tag_id) = :tagCount", nativeQuery = true)
-    List<Image> findImagesByTags(@Param("tagList") Collection<String> tagList, @Param("tagCount") int tagCount);
+//    @Query(value = "select * from images " +
+//            "join image_tag on images.image_id = image_tag.image_id " +
+//            "join tags on image_tag.tag_id = tags.tag_id where tags.tag in :tagList " +
+//            "group by images.image_id " +
+//            "having count(distinct tags.tag_id) = :tagCount", nativeQuery = true)
+//    List<Image> findImagesByTags(@Param("tagList") Collection<String> tagList, @Param("tagCount") int tagCount);
+
+    @Query("SELECT i FROM Image i " +
+            "JOIN i.tags t " +
+            "WHERE KEY(t).tag IN :tagList " +
+            "GROUP BY i.id " +
+            "HAVING COUNT(DISTINCT KEY(t).id) = :tagCount")
+    List<Image> findImagesByTags(@Param("tagList") Collection<String> tagList, @Param("tagCount") long tagCount);
 }
