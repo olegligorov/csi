@@ -31,10 +31,7 @@ export class SubmitPageComponent {
       this.hasError = true;
       this.loading = false;
       this.errorMessage = error.error.message;
-      console.log(this.errorMessage);
     });
-
-
 
     this.url = '';
     this.noCache = false;

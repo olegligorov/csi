@@ -81,9 +81,7 @@ export class GalleryPageComponent {
     clearTimeout(this.searchTimeout); // Clear any existing timeout
 
     this.searchTimeout = setTimeout(() => {
-      console.log('Input value has not changed for 1 seconds');
       const last_tag = this.tagsSearch?.split(',').pop()?.trim();
-      console.log(last_tag);
       this.getRecommendedTags(last_tag);
     }, 1000);
   }

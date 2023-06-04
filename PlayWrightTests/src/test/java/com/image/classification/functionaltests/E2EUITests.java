@@ -1,5 +1,7 @@
 package com.image.classification.functionaltests;
 
+import com.image.classification.functionaltests.pageobjects.GalleryPage;
+import com.image.classification.functionaltests.pageobjects.SubmitPage;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
@@ -24,8 +26,8 @@ public class E2EUITests {
     public static void setUp() {
         var playwright = Playwright.create();
         browser = playwright.chromium().launch(
-                new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(1000)
-//                new BrowserType.LaunchOptions().setHeadless(true)
+//                new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(1000)
+                new BrowserType.LaunchOptions().setHeadless(true)
         );
     }
 
@@ -57,43 +59,17 @@ public class E2EUITests {
     public void testSubmitUrlWithCacheRedirectsToPhotoPage() {
 //        open the main page
         Page currPage = context.newPage();
-        currPage.navigate("http://localhost:4200/");
-// enter image URL and check the checkbox
-        Locator searchBarLocator = currPage.locator("input#searchbar");
-        searchBarLocator.type("https://i.pinimg.com/564x/86/49/f5/8649f5cbfc573b1c5d7f190dcf52b96c.jpg");
-        Locator cacheCheckboxLocator = currPage.locator("input#cache_checkbox");
-//      TODO uncomment it
-//        cacheCheckboxLocator.click();
 
-// submit the image for analysis
-        Locator submitButton = currPage.locator("button#submit-button");
-        submitButton.click();
-// assert that we are redirected correctly
-        Pattern pattern = Pattern.compile("http://localhost:4200/images/.*");
-        PlaywrightAssertions.assertThat(currPage).hasURL(pattern);
-// assert that the image is present
-        Locator image = currPage.locator("#main-image");
-        PlaywrightAssertions.assertThat(image).isVisible();
-// click the first tag
-        Locator firstTag = currPage.locator(".image-page-tag:first-of-type a");
-        firstTag.click();
-// assert that we are redirected correctly to the gallery page
-        pattern = Pattern.compile("http://localhost:4200/images\\?tags=.+");
-        PlaywrightAssertions.assertThat(currPage).hasURL(pattern);
+        SubmitPage submitPage = new SubmitPage(currPage);
+        submitPage.navigate();
+        submitPage.analyseImage("https://i.pinimg.com/564x/86/49/f5/8649f5cbfc573b1c5d7f190dcf52b96c.jpg");
+        submitPage.assertImageWasAnalysed();
 
-//  assert that images are shown when searching by tags
-        image = currPage.locator(".gallery-card:first-of-type img");
-        PlaywrightAssertions.assertThat(image).isVisible();
+        submitPage.clickFirstTagToRedirectToGallery();
 
-//  click on the second and third tag in the recommended tags
-        Locator secondTag = currPage.locator(".form-recommended-tags > span:nth-of-type(3)");
-        Locator thirdTag = currPage.locator(".form-recommended-tags > span:nth-of-type(4)");
-        secondTag.click();
-        thirdTag.click();
-
-// assert that the endpoint changed and is searching for tags
-
-        pattern = Pattern.compile("http://localhost:4200/images\\?tags=.+,.+,.+");
-        PlaywrightAssertions.assertThat(currPage).hasURL(pattern);
+        GalleryPage galleryPage = new GalleryPage(currPage);
+        galleryPage.filterBySecondAndThirdTags();
+        galleryPage.clearTags();
+        galleryPage.clickTheFirstShownImage();
     }
 }

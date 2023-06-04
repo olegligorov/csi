@@ -3,8 +3,6 @@
     <img id="main-image" src="{{ image.url }}" alt="photo">
     <div class="image-page-data">
         <div class="image-page-url">
-
-
             <!-- <a href="{{ image.url }}">{{ image.url }}</a> -->
             <div class="imagelink">
                 <svg class="attach-url-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -19,11 +17,9 @@
                             </path>
                         </g>
                     </g>
-                </svg><a href="{{ image.url }}">Click here to view the image</a>
+                </svg>
+                <a href="{{ image.url }}">Click here to view the image</a>
             </div>
-
-            <!-- <a routerLink="/images/{{ image.id }}" class="clickable"> -->
-
         </div>
         <div class="image-page-tags">
             <div *ngFor="let tag of image?.tags | keyvalue" class="image-page-tag">

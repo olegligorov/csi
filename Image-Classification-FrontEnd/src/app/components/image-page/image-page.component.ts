@@ -20,7 +20,6 @@ export class ImagePageComponent implements OnInit {
     this.imageService.getImage(imageId).subscribe((image) => {
       this.image = image;
     }, error => {
-      // console.log(error.status);
         this.router.navigateByUrl(`not_found`)
     });
   }

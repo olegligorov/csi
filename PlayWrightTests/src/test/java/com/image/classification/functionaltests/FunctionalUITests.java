@@ -104,13 +104,16 @@ public class FunctionalUITests {
         Pattern pattern = Pattern.compile("http://localhost:4200/images/.*");
         PlaywrightAssertions.assertThat(currPage).hasURL(pattern);
 
+        Locator image = currPage.locator("#main-image");
+        PlaywrightAssertions.assertThat(image).isVisible();
+
         Locator firstTag = currPage.locator(".image-page-tag:first-of-type a");
         firstTag.click();
 
         pattern = Pattern.compile("http://localhost:4200/images\\?tags=.+");
         PlaywrightAssertions.assertThat(currPage).hasURL(pattern);
 
-        Locator image = currPage.locator(".gallery-card:first-of-type img");
+        image = currPage.locator(".gallery-card:first-of-type img");
         PlaywrightAssertions.assertThat(image).isVisible();
     }
 

@@ -162,10 +162,19 @@ a {
         font-size: 10px;
     }
 
+    .image-page-tags {
+        justify-content: left;
+        align-items: baseline;
+    }
+
     .image-page-tag {
         display: flex;
         flex-direction: row;
-        justify-content: left;
-        align-items: normal;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .tag-confidence {
+        visibility: visible;
     }
 }

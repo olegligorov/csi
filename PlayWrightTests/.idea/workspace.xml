@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45f09707-592f-4f22-8014-39d511977d2b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Image-Classification-FrontEnd/src/app/components/image-page/image-page.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Image-Classification-FrontEnd/src/app/components/image-page/image-page.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/image/classification/functionaltests/E2EUITests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/image/classification/functionaltests/E2EUITests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/image/classification/functionaltests/FunctionalUITests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/image/classification/functionaltests/FunctionalUITests.java" afterDir="false" />
@@ -15,6 +14,13 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -43,8 +49,8 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
-  <component name="RunManager" selected="JUnit.FunctionalUITests.testOpeningInvalidImageId">
-    <configuration name="FunctionalUITests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.E2EUiTest2.testSubmitUrlWithCacheRedirectsToPhotoPage">
+    <configuration name="E2EUiTest2.testSubmitUrlWithCacheRedirectsToPhotoPage" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PlayWrightTests" />
       <extension name="coverage">
         <pattern>
@@ -53,8 +59,9 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.image.classification.functionaltests" />
-      <option name="MAIN_CLASS_NAME" value="com.image.classification.functionaltests.FunctionalUITests" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="MAIN_CLASS_NAME" value="com.image.classification.functionaltests.E2EUiTest2" />
+      <option name="METHOD_NAME" value="testSubmitUrlWithCacheRedirectsToPhotoPage" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -125,11 +132,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.E2EUiTest2.testSubmitUrlWithCacheRedirectsToPhotoPage" />
         <item itemvalue="JUnit.FunctionalUITests.testOpeningInvalidImageId" />
         <item itemvalue="JUnit.FunctionalUITests.testSubmitUrlWithCacheRedirectsToPhotoPage" />
         <item itemvalue="JUnit.FunctionalUITests.testNavigationBar" />
         <item itemvalue="JUnit.FunctionalUITests.testFilteringByMultipleTagsInGalleryPage" />
-        <item itemvalue="JUnit.FunctionalUITests" />
       </list>
     </recent_temporary>
   </component>
@@ -145,6 +152,7 @@
       <workItem from="1685793193693" duration="1290000" />
       <workItem from="1685805654284" duration="1882000" />
       <workItem from="1685808018987" duration="115000" />
+      <workItem from="1685877274211" duration="2229000" />
     </task>
     <servers />
   </component>
