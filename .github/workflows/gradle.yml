@@ -66,10 +66,10 @@ jobs:
       with:
           node-version: 18
           
-#     - name: Clear npm cache
-#       run: |
-#         cd Image-Classification-FrontEnd
-#         npm cache clean --force
+    - name: Clear npm cache
+      run: |
+        cd Image-Classification-FrontEnd
+        npm cache clean --force
       
 #     - name: Delete node_modules and package-lock.json
 #       run: |
