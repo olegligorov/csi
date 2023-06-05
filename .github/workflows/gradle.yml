@@ -65,32 +65,33 @@ jobs:
       uses: actions/setup-node@v2
       with:
           node-version: 18
-          
-    - name: Clear npm cache
-      run: |
-        cd Image-Classification-FrontEnd
-        npm cache clean --force
-      
-#     - name: Delete node_modules and package-lock.json
+          cache: yarn
+        
+#     - name: Clear npm cache
 #       run: |
 #         cd Image-Classification-FrontEnd
-#         rm -rf node_modules
-#         rm -f package-lock.json
+#         npm cache clean --force
+      
+    - name: Delete node_modules and package-lock.json
+      run: |
+        cd Image-Classification-FrontEnd
+        rm -rf node_modules
+        rm -f package-lock.json
           
     - name: Install dependencies
       run: |
         cd Image-Classification-FrontEnd
-        npm install --legacy-peer-deps
+        yarn install
         
     - name: Build Angular project
       run: |
         cd Image-Classification-FrontEnd
-        npm run build
+        yarn build
 
     - name: Serve Angular project
       run: |
         cd cd Image-Classification-FrontEnd
-        npm run start &
+        yarn start &
           
     - name: Stop Spring application
       run: |
