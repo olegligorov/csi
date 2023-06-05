@@ -66,11 +66,6 @@ jobs:
       with:
           node-version: 14
 
-    - name: Install dependencies
-      run: |
-        cd Image-Classification-FrontEnd
-        npm ci
-
     - name: Build Angular project
       run: |
         cd Image-Classification-FrontEnd
@@ -78,7 +73,7 @@ jobs:
 
     - name: Serve Angular project
       run: |
-        cd cd Image-Classification-FrontEnd
+        cd cd Image-Classification-FrontEnd &
         npm run start
           
     - name: Stop Spring application
