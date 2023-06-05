@@ -66,16 +66,16 @@ jobs:
       with:
           node-version: 14
           
-    - name: Clear npm cache
-      run: |
-        cd Image-Classification-FrontEnd
-        npm cache clean --force
+#     - name: Clear npm cache
+#       run: |
+#         cd Image-Classification-FrontEnd
+#         npm cache clean --force
       
-    - name: Delete node_modules and package-lock.json
-      run: |
-        cd Image-Classification-FrontEnd
-        rm -rf node_modules
-        rm -f package-lock.json
+#     - name: Delete node_modules and package-lock.json
+#       run: |
+#         cd Image-Classification-FrontEnd
+#         rm -rf node_modules
+#         rm -f package-lock.json
           
     - name: Install dependencies
       run: |
