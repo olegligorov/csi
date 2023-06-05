@@ -5,7 +5,7 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: UI Tests
 
 on:
   push:
@@ -65,7 +65,11 @@ jobs:
       uses: actions/setup-node@v2
       with:
           node-version: 14
-
+    - name: Install dependencies
+      run: |
+        cd Image-Classification-FrontEnd
+        npm ci
+        
     - name: Build Angular project
       run: |
         cd Image-Classification-FrontEnd
@@ -73,8 +77,8 @@ jobs:
 
     - name: Serve Angular project
       run: |
-        cd cd Image-Classification-FrontEnd &
-        npm run start
+        cd cd Image-Classification-FrontEnd
+        npm run start &
           
     - name: Stop Spring application
       run: |
