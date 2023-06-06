@@ -67,10 +67,10 @@ jobs:
           node-version: 18
           cache: yarn
         
-#     - name: Clear npm cache
-#       run: |
-#         cd Image-Classification-FrontEnd
-#         npm cache clean --force
+    - name: Clear npm cache
+      run: |
+        cd Image-Classification-FrontEnd
+        npm cache clean --force
       
     - name: Delete node_modules and package-lock.json
       run: |
@@ -81,17 +81,17 @@ jobs:
     - name: Install dependencies
       run: |
         cd Image-Classification-FrontEnd
-        yarn install
+        npm install @clr/ui@15.1.0 @clr/angular@15.1.0 @cds/core@6.3.1 @cds/angular@6.3.1 @cds/city@1.1.0--legacy-peer-deps
         
     - name: Build Angular project
       run: |
         cd Image-Classification-FrontEnd
-        yarn build
+        npm run build
 
     - name: Serve Angular project
       run: |
         cd cd Image-Classification-FrontEnd
-        yarn start &
+        npm run start &
           
     - name: Stop Spring application
       run: |
