@@ -92,16 +92,11 @@ jobs:
       run: |
         cd Image-Classification-FrontEnd
         npm run start &
-        
-    - name: Init gradle
-      run: | 
-          cd Image-Classification 
-          ./gradlew init
           
     - name: Execute UI Tests
       run: |
           cd PlayWrightTests
-          ./gradlew build
+          mvn clean install
           
     - name: Stop Spring application
       run: |
