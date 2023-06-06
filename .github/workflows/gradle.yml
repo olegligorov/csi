@@ -90,7 +90,7 @@ jobs:
 
     - name: Serve Angular project
       run: |
-        cd cd Image-Classification-FrontEnd
+        cd Image-Classification-FrontEnd
         npm run start &
           
     - name: Stop Spring application
