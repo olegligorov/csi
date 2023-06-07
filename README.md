@@ -8,6 +8,8 @@ The Image Classification Service allows users to submit url and using external A
 For testing the backend i used Junit and RestAssured.
 For the UI Tests i used PlayWright.
 
+CI/CD Github Actions that run on each commit
+
 ## Backend Main Endpoints:
 - GET /images :  
     - With optional parameter: tags (Collection of strings)
@@ -22,3 +24,10 @@ For the UI Tests i used PlayWright.
 - Get /tagger_services - returns the list of used external tagging services
 - Get /tags
     - Optional parameter: prefix (returns all the tags that start with the given prefix, if prefix is empty then it returns all the tags)
+
+## Front-End Main Endpoints:
+- /: Main page - Image Analysing page where we can insert the url
+- /images - Gallery page
+- /images/:imageId - Image page for the image with the given imageId
+- /tagging_services - Tagging Services page where all the used tagging services are shown with the number of used and left requests 
+- /not_found - Image Not Found page to which we are redirected when we try to open the image page with an imageId that doesn't exist  
