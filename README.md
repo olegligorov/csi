@@ -34,4 +34,4 @@ CI/CD Github Actions that run on each commit
 
 ## Dependencies 
 Run in the terminal:  
-'npm install @clr/ui@15.1.0 @clr/angular@15.1.0 @cds/core@6.3.1 @cds/angular@6.3.1 @cds/city@1.1.0--legacy-peer-deps'
+`npm install @clr/ui@15.1.0 @clr/angular@15.1.0 @cds/core@6.3.1 @cds/angular@6.3.1 @cds/city@1.1.0--legacy-peer-deps`
